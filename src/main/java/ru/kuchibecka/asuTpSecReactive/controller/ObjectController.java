@@ -15,21 +15,20 @@ import ru.kuchibecka.asuTpSecReactive.dao.ObjectRepository;
 import ru.kuchibecka.asuTpSecReactive.entity.Object;
 
 @RestController
-@RequestMapping("api/object")
+@RequestMapping("api/object/")
 public class ObjectController {
     @Autowired
     private ObjectRepository objectRepository;
 
-    @GetMapping(path = "", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+
+    @GetMapping(path = "")
     Flux<Object> getObjects() {
         return objectRepository.findAll();
     }
 
-    @GetMapping(path = "/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    Mono<ResponseEntity<Object>> getObjects(@PathVariable Long id) {
-        return objectRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .onErrorReturn(ResponseEntity.status(404).build())
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+    //@GetMapping(path = "/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping("/{id}")
+    Mono<Object> getById(@PathVariable Long id) {
+        return objectRepository.findById(id);
     }
 }
