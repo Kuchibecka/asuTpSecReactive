@@ -1,13 +1,7 @@
 package ru.kuchibecka.asuTpSecReactive.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,6 +10,7 @@ import ru.kuchibecka.asuTpSecReactive.entity.Object;
 
 @RestController
 @RequestMapping("api/object/")
+@CrossOrigin("*")
 public class ObjectController {
     @Autowired
     private ObjectRepository objectRepository;
