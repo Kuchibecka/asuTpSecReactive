@@ -5,16 +5,19 @@ import org.springframework.web.bind.annotation.*;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ru.kuchibecka.asuTpSecReactive.dao.ObjectRepository;
+import ru.kuchibecka.asuTpSecReactive.repository.ObjectRepository;
 import ru.kuchibecka.asuTpSecReactive.entity.Object;
+import ru.kuchibecka.asuTpSecReactive.service.ObjectService;
 
 @RestController
-@RequestMapping("api/object/")
+@RequestMapping("api/object")
 @CrossOrigin("*")
 public class ObjectController {
     @Autowired
     private ObjectRepository objectRepository;
 
+    @Autowired
+    private ObjectService objectService;
 
     @GetMapping(path = "")
     Flux<Object> getObjects() {
@@ -25,5 +28,11 @@ public class ObjectController {
     @GetMapping("/{id}")
     Mono<Object> getById(@PathVariable Long id) {
         return objectRepository.findById(id);
+    }
+
+    @GetMapping("/by-name")
+    Flux<Object> byName(@RequestParam("name") String name){
+        System.out.println(name);
+        return objectService.getObjectByName(name);
     }
 }

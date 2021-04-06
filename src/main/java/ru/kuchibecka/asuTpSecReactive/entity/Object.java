@@ -19,7 +19,7 @@ import java.util.List;
 @Node
 public class Object {
     @Getter @Setter
-    @Id
+    @Id // ? @GeneratedValue ?
     private Long obj_id;
 
     @Getter @Setter
