@@ -7,7 +7,7 @@ import ru.kuchibecka.asuTpSecReactive.entity.Object;
 import ru.kuchibecka.asuTpSecReactive.repository.ObjectRepository;
 
 @Service
-public class ObjectService{
+public class ObjectService {
     @Autowired
     ObjectRepository objectRepository;
 
