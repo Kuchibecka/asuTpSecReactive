@@ -35,4 +35,9 @@ public class ObjectController {
         System.out.println(name);
         return objectService.getObjectByName(name);
     }
+
+    @GetMapping("/alt")
+    Flux<Object> getAllObjects(){
+        return objectRepository.findAllAlternate();
+    }
 }

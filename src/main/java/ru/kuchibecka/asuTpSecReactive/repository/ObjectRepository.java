@@ -9,4 +9,7 @@ public interface ObjectRepository extends ReactiveNeo4jRepository<Object, Long> 
 
     @Query("MATCH (a:Object) WHERE a.name contains 'PC' RETURN a")
     Flux<Object> findByName(String name);
+
+    @Query("MATCH (a)-[r]->(b) RETURN r")
+    Flux<Object> findAllAlternate();
 }
