@@ -96,4 +96,4 @@ RETURN DISTINCT nod1;
 // ВРОДЕ работает
 MATCH (s:Scheme)-[con:CONSISTS_OF]->(nod1:Object)-[rel:CONNECTED_TO*]->(nod2:Object)
   WHERE (s.scheme_id=5)
-RETURN DISTINCT rel;
+RETURN DISTINCT collect(rel);
