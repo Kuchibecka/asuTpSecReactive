@@ -91,9 +91,9 @@ RETURN distinct nod1, rel;
 // Вроде разделил, тут получше
 MATCH (s:Scheme)-[con:CONSISTS_OF]->(nod1:Object)-[rel:CONNECTED_TO*]-(nod2:Object)
   WHERE (s.scheme_id=5)
-RETURN DISTINCT nod1;
+RETURN collect(DISTINCT nod1) as nodes;
 
 // ВРОДЕ работает
 MATCH (s:Scheme)-[con:CONSISTS_OF]->(nod1:Object)-[rel:CONNECTED_TO*]->(nod2:Object)
   WHERE (s.scheme_id=5)
-RETURN DISTINCT collect(rel);
+RETURN collect(DISTINCT rel) as relationships;
