@@ -6,10 +6,8 @@ import reactor.core.publisher.Flux;
 import ru.kuchibecka.asuTpSecReactive.entity.Object;
 
 public interface ObjectRepository extends ReactiveNeo4jRepository<Object, Long> {
-
-    @Query("MATCH (a:Object) WHERE a.name contains 'PC' RETURN a")
+    /*
+    @Query("MATCH (a:Object) WHERE a.name contains $name RETURN a")
     Flux<Object> findByName(String name);
-
-    @Query("MATCH (a)-[r]->(b) RETURN r")
-    Flux<Object> findAllAlternate();
+    */
 }

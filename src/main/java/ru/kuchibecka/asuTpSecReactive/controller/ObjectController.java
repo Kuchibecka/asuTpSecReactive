@@ -14,30 +14,22 @@ import ru.kuchibecka.asuTpSecReactive.service.ObjectService;
 @CrossOrigin("*")
 public class ObjectController {
     @Autowired
-    private ObjectRepository objectRepository;
-
-    @Autowired
     private ObjectService objectService;
 
     @GetMapping(path = "")
     Flux<Object> getObjects() {
-        return objectRepository.findAll();
+        return objectService.findAll();
     }
 
     //@GetMapping(path = "/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @GetMapping("/{id}")
     Mono<Object> getById(@PathVariable Long id) {
-        return objectRepository.findById(id);
+        return objectService.findById(id);
     }
 
     @GetMapping("/by-name")
     Flux<Object> byName(@RequestParam("name") String name){
         System.out.println(name);
         return objectService.getObjectByName(name);
-    }
-
-    @GetMapping("/alt")
-    Flux<Object> getAllObjects(){
-        return objectRepository.findAllAlternate();
     }
 }
