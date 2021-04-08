@@ -79,3 +79,21 @@ RETURN sch, a;
 MATCH (sch:Scheme)-[r]->(a)
   WHERE (sch.name = 'Configuration N1')
 RETURN sch, a, r;
+
+// Возможно то, что нужно: ноды и связи, но с какими-то повторениями (!?)
+MATCH (s:Scheme)-[con:CONSISTS_OF]->(nod1:Object)-[rel:CONNECTED_TO*]-(nod2:Object)
+  WHERE (s.scheme_id=5)
+RETURN distinct nod1, rel;
+
+// Разделить на два запроса, а потом UNION?
+// Тупо разделить на 2 запроса для нодов и связей?
+
+// Вроде разделил, тут получше
+MATCH (s:Scheme)-[con:CONSISTS_OF]->(nod1:Object)-[rel:CONNECTED_TO*]-(nod2:Object)
+  WHERE (s.scheme_id=5)
+RETURN DISTINCT nod1;
+
+// ВРОДЕ работает
+MATCH (s:Scheme)-[con:CONSISTS_OF]->(nod1:Object)-[rel:CONNECTED_TO*]->(nod2:Object)
+  WHERE (s.scheme_id=5)
+RETURN DISTINCT rel;
