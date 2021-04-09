@@ -10,6 +10,6 @@ import ru.kuchibecka.asuTpSecReactive.service.SchemeService;
 import java.util.List;
 
 public interface SchemeRepository extends ReactiveNeo4jRepository<Scheme, Long> {
-    @Query("MATCH (s:Scheme)-[con:CONSISTS_OF]->(nod1:Object)-[rel:CONNECTED_TO*]-(nod2:Object) WHERE (s.scheme_id=$id) RETURN collect(DISTINCT nod1);")
+    @Query("MATCH (s:Scheme)-[con:CONSISTS_OF]->(nod1:Object)-[rel:CONNECTED_TO*]-(nod2:Object) WHERE (s.scheme_id=$id) RETURN DISTINCT nod1;")
     Mono<List<Node>> findNodesById(Long id);
 }

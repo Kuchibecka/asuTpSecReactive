@@ -15,7 +15,7 @@ import java.util.Map;
 public class Node {
     @Getter
     @Setter
-    private Long id;
+    private Long identity;
 
     @Getter
     @Setter
