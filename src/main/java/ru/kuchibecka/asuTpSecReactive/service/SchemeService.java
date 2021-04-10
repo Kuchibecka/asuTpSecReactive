@@ -9,6 +9,7 @@ import ru.kuchibecka.asuTpSecReactive.entity.Object;
 import ru.kuchibecka.asuTpSecReactive.entity.Scheme;
 import ru.kuchibecka.asuTpSecReactive.repository.SchemeRepository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -30,7 +31,9 @@ public class SchemeService {
         return schemeRepository.findById(id);
     }
 
-    public Mono<List<Node>> findNodesById(Long id) {
+    /*
+    public Flux<Node> findNodesById(Long id) {
         return schemeRepository.findNodesById(id);
     }
+     */
 }

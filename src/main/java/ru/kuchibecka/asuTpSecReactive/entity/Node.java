@@ -5,23 +5,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-import java.util.Map;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class Node {
     @Getter
     @Setter
-    private Long identity;
+    private Long obj_id;
 
     @Getter
     @Setter
-    private List<String> labels;
+    private int type;
 
     @Getter
     @Setter
-    private Map<String, java.lang.Object> properties;
+    private String name;
 }
