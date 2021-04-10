@@ -39,22 +39,20 @@ public class SchemeController {
     }
 
     @GetMapping("/{id}/nodes")
-    Flux<Object> getNodesById(@PathVariable Long id) {
+    Flux<Node> getNodesById(@PathVariable Long id) {
         return schemeService
                 .findById(id)
                 .flatMapIterable(a -> {
                     List<Object> objectList = a.getObjectList();
                     List<Node> nodeList = new ArrayList<Node>();
-                    Iterator iterator = objectList.listIterator();
-                    while (iterator.hasNext()) {
-                        Object el = (Object) iterator.next();
+                    for (Object el : objectList) {
                         Node node = new Node(el.getObj_id(),
                                 el.getType(),
                                 el.getName()
                         );
                         nodeList.add(node);
                     }
-                    return objectList;
+                    return nodeList;
                 });
     }
 }
