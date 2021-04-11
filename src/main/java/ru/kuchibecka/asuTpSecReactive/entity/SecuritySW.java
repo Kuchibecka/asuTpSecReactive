@@ -18,14 +18,11 @@ import java.util.List;
 @Setter
 @Node
 public class SecuritySW {
-    @Getter @Setter
     @Id
     private Long secSW_id;
 
-    @Getter @Setter
     private String name;
 
-    @Getter @Setter
     private int price;
 
     @Relationship(type = "HAS_EXPLOITS", direction = Relationship.Direction.OUTGOING)

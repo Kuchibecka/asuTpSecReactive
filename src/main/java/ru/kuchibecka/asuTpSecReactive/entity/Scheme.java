@@ -18,17 +18,13 @@ import java.util.List;
 @Setter
 @Node
 public class Scheme {
-    @Getter @Setter
     @Id
     private Long scheme_id;
 
-    @Getter @Setter
     private String name;
 
-    @Getter @Setter
     private String description;
 
-    @Getter @Setter
     @Relationship(type = "CONSISTS_OF", direction = Relationship.Direction.OUTGOING)
     private List<Object> objectList = new ArrayList<>();
 

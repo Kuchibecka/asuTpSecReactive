@@ -18,11 +18,9 @@ import java.util.List;
 @Setter
 @Node
 public class Virus {
-    @Getter @Setter
     @Id
     private Long virus_id;
 
-    @Getter @Setter
     private String name;
 
     @Relationship(type = "HAS_EXPLOITS", direction = Relationship.Direction.OUTGOING)

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ru.kuchibecka.asuTpSecReactive.entity.Node;
+import ru.kuchibecka.asuTpSecReactive.entity.graph.Node;
 import ru.kuchibecka.asuTpSecReactive.entity.Object;
 import ru.kuchibecka.asuTpSecReactive.entity.Scheme;
 import ru.kuchibecka.asuTpSecReactive.service.SchemeService;
@@ -46,8 +46,8 @@ public class SchemeController {
                     List<Object> objectList = a.getObjectList();
                     List<Node> nodeList = new ArrayList<Node>();
                     for (Object el : objectList) {
-                        Node node = new Node(el.getObj_id(),
-                                el.getType(),
+                        Node node = new Node(
+                                el.getObj_id(),
                                 el.getName()
                         );
                         nodeList.add(node);
