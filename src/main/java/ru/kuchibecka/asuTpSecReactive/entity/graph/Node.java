@@ -6,7 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 public class Node {
-    private Long id;
+    private String id;
 
     @Data
     public class data {
@@ -27,7 +27,7 @@ public class Node {
     private position position;
 
     // constructor for label assignment
-    public Node(Long id, String data) {
+    public Node(String id, String data) {
         this.id = id;
         this.position = new position();
         Node.data data1 = new data();

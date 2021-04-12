@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.kuchibecka.asuTpSecReactive.entity.Scheme;
+import ru.kuchibecka.asuTpSecReactive.entity.graph.Relationship;
 import ru.kuchibecka.asuTpSecReactive.repository.SchemeRepository;
 
 @Service
@@ -26,6 +27,9 @@ public class SchemeService {
         return schemeRepository.findById(id);
     }
 
+    public Flux<Relationship> findRelationsById(Long id) {
+        return schemeRepository.findRelationsById(id);
+    }
     /*
     public Flux<Node> findNodesById(Long id) {
         return schemeRepository.findNodesById(id);

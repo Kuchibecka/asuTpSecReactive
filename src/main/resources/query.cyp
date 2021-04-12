@@ -97,3 +97,8 @@ RETURN collect(DISTINCT nod1) as nodes;
 MATCH (s:Scheme)-[con:CONSISTS_OF]->(nod1:Object)-[rel:CONNECTED_TO*]->(nod2:Object)
   WHERE (s.scheme_id=5)
 RETURN collect(DISTINCT rel) as relationships;
+
+// Вроде работает для получения начала и конца отношения по номеру схемы
+MATCH (s:Scheme)-[:CONSISTS_OF]->(n1:Object), c=(n1)-[con:CONNECTED_TO]-(:Object)
+  WHERE (s.scheme_id=5)
+RETURN DISTINCT {startId: id(startNode(con)), endId: id(endNode(con))}
