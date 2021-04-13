@@ -1,5 +1,6 @@
 package ru.kuchibecka.asuTpSecReactive.controller;
 
+import org.neo4j.driver.internal.value.ListValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -11,7 +12,6 @@ import ru.kuchibecka.asuTpSecReactive.entity.graph.Relationship;
 import ru.kuchibecka.asuTpSecReactive.service.SchemeService;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/scheme")
@@ -46,7 +46,7 @@ public class SchemeController {
                 .findById(id)
                 .flatMapIterable(a -> {
                     List<Object> objectList = a.getObjectList();
-                    List<Node> nodeList = new ArrayList<Node>();
+                    List<Node> nodeList = new ArrayList<>();
                     for (Object el : objectList) {
                         Node node = new Node(
                                 el.getObj_id().toString(),
@@ -58,57 +58,23 @@ public class SchemeController {
                 });
     }
 
-    @GetMapping("/{id}/relationss")
-    Mono<List<Relationship>> getRelationsByIdd(@PathVariable Long id) {
-        return schemeService
-                .findRelationsById(id)
-                .collectList()
-                .flatMapIterable(a -> {
-                        List<Relationship> relationshipList = new ArrayList<>();
-                        //relationshipList.add(a);
-                        return relationshipList;
-                })
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/{id}/relationsss")
-    Mono<List<Object>> getRelationsByIddd(@PathVariable Long id) {
-        return schemeService.findById(id).map(a -> a.getObjectList());
-    }
-
     @GetMapping("/{id}/relations")
-    Flux<java.lang.Object> getRelationsById(@PathVariable Long id) {
-        return schemeService
-                .findRelationsById(id)
-                .map(r -> {
-                    System.out.println(r);
-                    Relationship rel = new Relationship(r.getStartId(), r.getEndId());
-                    return Flux.just(rel)
-                            .subscribe(v -> System.out.println(v));
-                });
+    Mono<List<Relationship>> getRelationsById(@PathVariable Long id) {
+        return schemeService.findById(id).map(a -> {
+            List<Object> objectList = a.getObjectList();
+            List<Relationship> relationshipList = new ArrayList<>();
+            List<Object> connectedTo;
+            for(Object o : objectList) {
+                connectedTo = o.getObjectList();
+                for (Object obj : connectedTo) {
+                    Relationship relationship = new Relationship(
+                            o.getObj_id(), obj.getObj_id()
+                    );
+                    relationshipList.add(relationship);
+                }
+
+            }
+            return relationshipList;
+        });
     }
-
-
-
-
-
-                /*
-                .subscribe() {data => System.out.println(data);}
-                .flatMapIterable(a -> {
-                    List<Relationship> relationshipList = new ArrayList<Relationship>();
-                    relationshipList.add(new Relationship(a.getId(), a.getSource(), a.getTarget(), "step", false));
-                    /*
-                    List<Object> objectList = a.getObjectList();
-                    for (Object el : objectList) {
-                        Node node = new Node(
-                                el.getObj_id().toString(),
-                                el.getName()
-                        );
-                        nodeList.add(node);
-                    }
-
-                    return relationshipList;
-                });
-        schemeService.findRelationsById(id)
-                */
 }

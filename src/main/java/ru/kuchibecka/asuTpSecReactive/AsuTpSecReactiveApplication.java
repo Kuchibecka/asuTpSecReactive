@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+
+
 @SpringBootApplication
 @EnableAsync
 @Configuration				// todo: ???	https://spring-projects.ru/guides/accessing-data-neo4j/
