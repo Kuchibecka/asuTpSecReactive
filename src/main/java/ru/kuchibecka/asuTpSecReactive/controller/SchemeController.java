@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import ru.kuchibecka.asuTpSecReactive.entity.Virus;
 import ru.kuchibecka.asuTpSecReactive.entity.graph.Node;
 import ru.kuchibecka.asuTpSecReactive.entity.Object;
 import ru.kuchibecka.asuTpSecReactive.entity.Scheme;
@@ -74,7 +75,7 @@ public class SchemeController {
                             boolean animated = false;
                             Relationship relationship = new Relationship(
                                     relId,
-                                    o.getObj_id(), obj.getObj_id(),
+                                    o.getObj_id().toString(), obj.getObj_id().toString(),
                                     type,
                                     animated
                             );
@@ -82,6 +83,35 @@ public class SchemeController {
                         }
                     }
                     return relationshipList;
+                })
+                .flatMapMany(Flux::fromIterable);
+    }
+
+    @GetMapping("/{id}/infections")
+    Flux<Relationship> getInfectionsById(@PathVariable Long id) {
+        return schemeService
+                .findById(id)
+                .map(a -> {
+                    List<Object> objectList = a.getObjectList();
+                    List<Relationship> infectionList = new ArrayList<>();
+                    List<Virus> virusList;
+                    for (Object o : objectList) {
+                        virusList = o.getVirusList();
+                        for (Virus v : virusList) {
+                            String virusId = "virus" + v.getVirus_id().toString();
+                            String relId = "e" + virusId + "-" + o.getObj_id();
+                            String type = "default";
+                            boolean animated = true;
+                            Relationship relationship = new Relationship(
+                                    relId,
+                                    virusId, o.getObj_id().toString(),
+                                    type,
+                                    animated
+                            );
+                            infectionList.add(relationship);
+                        }
+                    }
+                    return infectionList;
                 })
                 .flatMapMany(Flux::fromIterable);
     }

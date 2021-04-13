@@ -15,9 +15,9 @@ import java.util.Map;
 public class Relationship {
     private String id;
 
-    private Long source;
+    private String source;
 
-    private Long target;
+    private String target;
 
     private String type;
 
