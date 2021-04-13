@@ -59,22 +59,24 @@ public class SchemeController {
     }
 
     @GetMapping("/{id}/relations")
-    Mono<List<Relationship>> getRelationsById(@PathVariable Long id) {
-        return schemeService.findById(id).map(a -> {
-            List<Object> objectList = a.getObjectList();
-            List<Relationship> relationshipList = new ArrayList<>();
-            List<Object> connectedTo;
-            for(Object o : objectList) {
-                connectedTo = o.getObjectList();
-                for (Object obj : connectedTo) {
-                    Relationship relationship = new Relationship(
-                            o.getObj_id(), obj.getObj_id()
-                    );
-                    relationshipList.add(relationship);
-                }
-
-            }
-            return relationshipList;
-        });
+    Flux<Relationship> getRelationsById(@PathVariable Long id) {
+        return schemeService
+                .findById(id)
+                .map(a -> {
+                    List<Object> objectList = a.getObjectList();
+                    List<Relationship> relationshipList = new ArrayList<>();
+                    List<Object> connectedTo;
+                    for (Object o : objectList) {
+                        connectedTo = o.getObjectList();
+                        for (Object obj : connectedTo) {
+                            Relationship relationship = new Relationship(
+                                    o.getObj_id(), obj.getObj_id()
+                            );
+                            relationshipList.add(relationship);
+                        }
+                    }
+                    return relationshipList;
+                })
+                .flatMapMany(Flux::fromIterable);
     }
 }
