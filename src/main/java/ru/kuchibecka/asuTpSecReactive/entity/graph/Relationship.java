@@ -13,15 +13,13 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Relationship {
-    private Long startId;
+    private String id;
 
-    private Long endId;
+    private Long source;
 
-    /*
-    private String end;
+    private Long target;
 
     private String type;
 
     private boolean animated;
-*/
 }

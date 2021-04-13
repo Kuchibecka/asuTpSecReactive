@@ -69,8 +69,14 @@ public class SchemeController {
                     for (Object o : objectList) {
                         connectedTo = o.getObjectList();
                         for (Object obj : connectedTo) {
+                            String relId = "e" + o.getObj_id() + "-" + obj.getObj_id();
+                            String type = "step";
+                            boolean animated = false;
                             Relationship relationship = new Relationship(
-                                    o.getObj_id(), obj.getObj_id()
+                                    relId,
+                                    o.getObj_id(), obj.getObj_id(),
+                                    type,
+                                    animated
                             );
                             relationshipList.add(relationship);
                         }
