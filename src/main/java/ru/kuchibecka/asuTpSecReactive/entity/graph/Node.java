@@ -20,8 +20,9 @@ public class Node {
         private int y;
 
         public position() {
-            this.x = (int) (100 + Math.random()*100);
-            this.y = (int) (100 + Math.random()*100);
+            // double spread = Math.random()*4 - 2;
+            this.x = (int) (100 + Math.random()*150);
+            this.y = (int) (100 + Math.random()*150);
         }
     }
     private position position;
