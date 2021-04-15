@@ -87,6 +87,29 @@ public class SchemeController {
                 .flatMapMany(Flux::fromIterable);
     }
 
+    @GetMapping("/{id}/viruses")
+    Flux<Node> getVirusesById(@PathVariable Long id) {
+        return schemeService
+                .findById(id)
+                .flatMapIterable(a -> {
+                    List<Object> objectList = a.getObjectList();
+                    List<Virus> virusList;
+                    List<Node> nodeList = new ArrayList<>();
+                    for (Object o : objectList) {
+                        virusList = o.getVirusList();
+                        for (Virus vi : virusList) {
+                            Node virus = new Node(
+                                    "virus" + vi.getVirus_id().toString(),
+                                    vi.getName()
+                            );
+                            nodeList.add(virus);
+                        }
+                    }
+                    return nodeList;
+                });
+    }
+
+
     @GetMapping("/{id}/infections")
     Flux<Relationship> getInfectionsById(@PathVariable Long id) {
         return schemeService
