@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.neo4j.driver.internal.shaded.reactor.util.annotation.Nullable;
+import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
 import org.neo4j.springframework.data.core.schema.Relationship;
@@ -19,7 +19,7 @@ import java.util.List;
 @Setter
 @Node
 public class Object {
-    @Id // ? @GeneratedValue ?
+    @Id @GeneratedValue
     private Long obj_id;
 
     private int type;
@@ -38,12 +38,13 @@ public class Object {
     @Relationship(type = "AND", direction = Relationship.Direction.OUTGOING)
     private List<Object> andCriteriaList = new ArrayList<>();
 
-    public Object(Long obj_id, int type, String name) {
-        List<Virus> virusList = new ArrayList<>();
-        List<SecuritySW> securitySWList = new ArrayList<>();
-        List<Object> objectList = new ArrayList<>();
-        List<Object> andCriteriaList = new ArrayList<>();
-        Object object = new Object(obj_id, type, name, virusList, securitySWList, objectList, andCriteriaList);
+    public Object(int type, String name, List<Virus> virusList, List<SecuritySW> securitySWList, List<Object> objectList, List<Object> andCriteriaList) {
+        this.type = type;
+        this.name = name;
+        this.virusList = virusList;
+        this.securitySWList = securitySWList;
+        this.objectList = objectList;
+        this.andCriteriaList = andCriteriaList;
     }
 }
 //todo: проверить на полноту оснастку (репо, сервис, контроллер)

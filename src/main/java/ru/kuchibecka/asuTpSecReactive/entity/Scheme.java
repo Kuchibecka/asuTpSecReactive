@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
 import org.neo4j.springframework.data.core.schema.Relationship;
@@ -18,7 +19,7 @@ import java.util.List;
 @Setter
 @Node
 public class Scheme {
-    @Id
+    @Id @GeneratedValue
     private Long scheme_id;
 
     private String name;
