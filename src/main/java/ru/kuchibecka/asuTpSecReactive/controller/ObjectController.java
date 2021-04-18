@@ -25,7 +25,6 @@ public class ObjectController {
         return objectService.findAll();
     }
 
-    //@GetMapping(path = "/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @GetMapping("/{id}")
     Mono<Object> getById(@PathVariable Long id) {
         return objectService.findById(id);
