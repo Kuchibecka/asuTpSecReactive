@@ -16,7 +16,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/scheme")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000")
 public class SchemeController {
     @Autowired
     private SchemeService schemeService;

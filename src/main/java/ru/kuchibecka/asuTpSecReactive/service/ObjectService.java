@@ -2,6 +2,8 @@ package ru.kuchibecka.asuTpSecReactive.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.kuchibecka.asuTpSecReactive.entity.Object;
@@ -24,5 +26,9 @@ public class ObjectService {
 
     public Mono<Object> findById(Long id) {
         return objectRepository.findById(id);
+    }
+
+    public Mono<Object> save(Object object) {
+        return objectRepository.save(object);
     }
 }

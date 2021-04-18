@@ -15,15 +15,10 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("api/object")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ObjectController {
     @Autowired
     private ObjectService objectService;
-
-    // todo: убрать /*
-    @Autowired
-    private ObjectRepository objectRepository;
-    // todo: убрать, реализовав save() в objectService */
 
     @GetMapping(path = "")
     Flux<Object> getObjects() {
@@ -42,11 +37,8 @@ public class ObjectController {
         return objectService.getObjectByName(name);
     }
 
-    // возможно post-запрос с property класса Object передаваемыми queryParams
-    @PostMapping(value ="/new", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PostMapping("")
     Mono<Object> createObject(@RequestBody Object object) {
-        System.out.println(object);
-        return objectRepository.save(object);
+        return objectService.save(object);
     }
 }
