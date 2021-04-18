@@ -19,6 +19,7 @@ import java.util.List;
 @Setter
 @Node
 public class Object {
+
     @Id @GeneratedValue
     private Long obj_id;
 

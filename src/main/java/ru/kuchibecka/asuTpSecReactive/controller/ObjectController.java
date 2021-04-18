@@ -1,9 +1,8 @@
 package ru.kuchibecka.asuTpSecReactive.controller;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -11,7 +10,6 @@ import ru.kuchibecka.asuTpSecReactive.repository.ObjectRepository;
 import ru.kuchibecka.asuTpSecReactive.entity.Object;
 import ru.kuchibecka.asuTpSecReactive.service.ObjectService;
 
-import java.util.ArrayList;
 
 @RestController
 @RequestMapping("api/object")
@@ -19,6 +17,9 @@ import java.util.ArrayList;
 public class ObjectController {
     @Autowired
     private ObjectService objectService;
+
+    @Autowired
+    private ObjectRepository objectRepository;
 
     @GetMapping(path = "")
     Flux<Object> getObjects() {
@@ -39,5 +40,14 @@ public class ObjectController {
     @PostMapping("")
     Mono<Object> createObject(@RequestBody Object object) {
         return objectService.save(object);
+    }
+
+    @PutMapping("/edit/{id}")
+    Mono<Object> updateObject(@PathVariable Long id, @RequestBody Object object) {
+        return objectRepository.findById(id)
+                .flatMap(dbObject -> {
+                    BeanUtils.copyProperties(object, dbObject);
+                    return objectService.save(dbObject);
+                });
     }
 }
