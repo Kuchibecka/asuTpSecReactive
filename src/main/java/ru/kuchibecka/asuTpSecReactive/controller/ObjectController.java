@@ -3,11 +3,10 @@ package ru.kuchibecka.asuTpSecReactive.controller;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ru.kuchibecka.asuTpSecReactive.repository.ObjectRepository;
 import ru.kuchibecka.asuTpSecReactive.entity.Object;
+import ru.kuchibecka.asuTpSecReactive.repository.ObjectRepository;
 import ru.kuchibecka.asuTpSecReactive.service.ObjectService;
 
 
@@ -49,5 +48,14 @@ public class ObjectController {
                     BeanUtils.copyProperties(object, dbObject);
                     return objectService.save(dbObject);
                 });
+    }
+
+    @DeleteMapping("/delete/{id}")
+    Mono<Boolean> deleteObject(@PathVariable Long id) {
+        return objectService.findById(id)
+                .flatMap(object ->
+                        objectRepository.delete(object)
+                                .then(Mono.just(true))
+                );
     }
 }
