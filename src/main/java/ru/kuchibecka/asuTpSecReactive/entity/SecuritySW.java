@@ -26,7 +26,9 @@ public class SecuritySW {
 
     private int price;
 
-    @Relationship(type = "HAS_EXPLOITS", direction = Relationship.Direction.OUTGOING)
-    private List<SecureExploit> securityExploit = new ArrayList<>();
+    private String description;
+
+    @Relationship(type = "PREVENTS_EXPLOIT", direction = Relationship.Direction.OUTGOING)
+    private List<Exploit> securityExploit = new ArrayList<>();
 }
 //todo: написать оснастку (репо, сервис, контроллер)

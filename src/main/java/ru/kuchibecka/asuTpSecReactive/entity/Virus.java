@@ -24,7 +24,7 @@ public class Virus {
 
     private String name;
 
-    @Relationship(type = "HAS_EXPLOITS", direction = Relationship.Direction.OUTGOING)
-    private List<VirusExploit> virusExploit = new ArrayList<>();
+    @Relationship(type = "USES_EXPLOIT", direction = Relationship.Direction.OUTGOING)
+    private List<Exploit> virusExploit = new ArrayList<>();
 }
 //todo: написать оснастку (репо, сервис, контроллер)
