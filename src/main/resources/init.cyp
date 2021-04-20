@@ -145,6 +145,18 @@ CREATE (b)-[r:CONNECTED_TO]->(a)
 RETURN a,b,r;
 
 
+MATCH (a:Virus), (b:Object)
+  WHERE ((a.name = 'Worm') and b.name = 'UserPC1')
+CREATE (b)-[r:INFECTED_BY]->(a)
+RETURN a,b,r;
+
+
+MATCH (a:Virus), (b:Object)
+  WHERE ((a.name = 'Predator') and b.name = 'UserPC6')
+CREATE (b)-[r:INFECTED_BY]->(a)
+RETURN a,b,r;
+
+
 CREATE (sch1:Scheme {name: 'Configuration N2', description: 'The second test configuration system'})
 SET sch1.scheme_id = ID(sch1);
 
