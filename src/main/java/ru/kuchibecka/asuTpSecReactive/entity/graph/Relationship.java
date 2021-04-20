@@ -22,4 +22,12 @@ public class Relationship {
     private String type;
 
     private boolean animated;
+
+    @Data
+    @AllArgsConstructor
+    public static class Style {
+        private String stroke;
+    }
+
+    private Style style;
 }

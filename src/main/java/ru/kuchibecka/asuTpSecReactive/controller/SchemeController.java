@@ -71,13 +71,14 @@ public class SchemeController {
                         connectedTo = o.getObjectList();
                         for (Object obj : connectedTo) {
                             String relId = "e" + o.getObj_id() + "-" + obj.getObj_id();
-                            String type = "step";
+                            String type = "straight";
                             boolean animated = false;
                             Relationship relationship = new Relationship(
                                     relId,
                                     o.getObj_id().toString(), obj.getObj_id().toString(),
                                     type,
-                                    animated
+                                    animated,
+                                    new Relationship.Style("")
                             );
                             relationshipList.add(relationship);
                         }
@@ -132,7 +133,8 @@ public class SchemeController {
                                     relId,
                                     virusId, o.getObj_id().toString(),
                                     type,
-                                    animated
+                                    animated,
+                                    new Relationship.Style("red")
                             );
                             infectionList.add(relationship);
                         }

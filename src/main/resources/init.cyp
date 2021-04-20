@@ -93,7 +93,7 @@ RETURN a,b,r;
 MATCH (a:Object) WITH a
 MATCH (b:Object)
   WHERE ((a.name = 'UserPC2') and (b.name = 'UserPC3'))
-CREATE (b)-[r:CONNECTED_TO]->(a)
+CREATE (a)-[r:CONNECTED_TO]->(b)
 RETURN a,b,r;
 
 MATCH (a:Object) WITH a
@@ -134,7 +134,7 @@ RETURN a,b,r;
 
 MATCH (a:Object) WITH a
 MATCH (b:Object)
-  WHERE ((a.name = 'UserPC5') and (b.name = 'WaterPump1'))
+  WHERE ((a.name = 'UserPC5') and (b.name = 'WaterPump2'))
 CREATE (b)-[r:CONNECTED_TO]->(a)
 RETURN a,b,r;
 
