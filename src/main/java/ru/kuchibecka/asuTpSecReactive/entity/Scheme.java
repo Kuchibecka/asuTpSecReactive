@@ -29,6 +29,7 @@ public class Scheme {
     @Relationship(type = "CONSISTS_OF", direction = Relationship.Direction.OUTGOING)
     private List<Object> objectList = new ArrayList<>();
 
+    // todo: убрать из-за неиспользования?
     @Relationship(type = "CONTAINS", direction = Relationship.Direction.OUTGOING)
     private List<Virus> virusList = new ArrayList<>();
 

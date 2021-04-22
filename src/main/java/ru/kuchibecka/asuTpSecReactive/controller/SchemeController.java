@@ -140,5 +140,50 @@ public class SchemeController {
                 .flatMapMany(Flux::fromIterable);
     }
 
+    @GetMapping("/{id}/fault_tree_nodes")
+    Flux<Node> getTreeNodesById(@PathVariable Long id) {
+        return schemeService
+                .findById(id)
+                .flatMapIterable(a -> {
+                    List<Object> criteriaList = a.getCriteriaList();
+                    List<Node> treeNodeList = new ArrayList<>();
+                    for (Object el : criteriaList) {
+                        Node node = new Node(
+                                el.getObj_id().toString(),
+                                el.getName()
+                        );
+                        treeNodeList.add(node);
+                    }
+                    return treeNodeList;
+                });
+    }
 
+    @GetMapping("/{id}/fault_tree_relations")
+    Flux<Relationship> getTreeRelationsById(@PathVariable Long id) {
+        return schemeService
+                .findById(id)
+                .map(a -> {
+                    List<Object> objectList = a.getObjectList();
+                    List<Relationship> treeRelationshipList = new ArrayList<>();
+                    List<Object> connectedTo;
+                    for (Object o : objectList) {
+                        connectedTo = o.getAndCriteriaList();
+                        for (Object andObj : connectedTo) {
+                            String relId = "e" + o.getObj_id() + "-" + andObj.getObj_id();
+                            String type = "step";
+                            boolean animated = false;
+                            Relationship relationship = new Relationship(
+                                    relId,
+                                    o.getObj_id().toString(), andObj.getObj_id().toString(),
+                                    type,
+                                    animated,
+                                    new Relationship.Style("black")
+                            );
+                            treeRelationshipList.add(relationship);
+                        }
+                    }
+                    return treeRelationshipList;
+                })
+                .flatMapMany(Flux::fromIterable);
+    }
 }
