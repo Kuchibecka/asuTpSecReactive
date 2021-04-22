@@ -1,13 +1,13 @@
-CREATE (v1:Virus {name: 'HungryRat'})
+CREATE (v1:Virus {name: 'HungryRat', description:'Первый созданный вирус!'})
 SET v1.virus_id = ID(v1);
-CREATE (v2:Virus {name: 'Trojan'})
+CREATE (v2:Virus {name: 'Trojan', description:'Типичный троянский вирус. Очень опасно, знаете ли...'})
 SET v2.virus_id = ID(v2);
 
-CREATE (o1:Object {name: 'PC1', type: 1})
+CREATE (o1:Object {name: 'PC1', type: 1, description:'Стандартный пользовательский ПК номер 1'})
 SET o1.obj_id = ID(o1);
-CREATE (o2:Object {name: 'PC2', type: 1})
+CREATE (o2:Object {name: 'PC2', type: 1, description:'Стандартный пользовательский ПК номер 2'})
 SET o2.obj_id = ID(o2);
-CREATE (o3:Object {name: 'PC3', type: 1})
+CREATE (o3:Object {name: 'PC3', type: 1, description:'Стандартный пользовательский ПК номер 3'})
 SET o3.obj_id = ID(o3);
 
 MATCH (a), (b)
@@ -28,7 +28,7 @@ MATCH (a), (b)
 CREATE (b)-[r:CONNECTED_TO]->(a)
 RETURN a,b,r;
 
-CREATE (sch1:Scheme {name: 'Configuration N1', description: 'The first test configuration system'})
+CREATE (sch1:Scheme {name: 'Configuration N1', description: 'Первая конфигурация'})
 SET sch1.scheme_id = ID(sch1);
 
 MATCH (a:Object), (b:Object), (c:Object), (sch:Scheme)
@@ -46,28 +46,28 @@ RETURN sch,a,b,r1,r2;
 
 
 // ___________________NEW INIT SCHEME___________________
-CREATE (v1:Virus {name: 'Worm'})
+CREATE (v1:Virus {name: 'Worm', description:'Просто вирус-червь. Очень распространённый тип вируса. Может быть опасным, но не очень'})
 SET v1.virus_id = ID(v1);
-CREATE (v2:Virus {name: 'Predator'})
+CREATE (v2:Virus {name: 'Predator', description:'Предельно сильный вирус. Берегись!'})
 SET v2.virus_id = ID(v2);
 
-CREATE (o:Object {name: 'UserPC1', type: 1})
+CREATE (o:Object {name: 'UserPC1', type: 1, description:'Стандартный персональный компьютер пользователя № 1'})
 SET o.obj_id = ID(o);
-CREATE (o:Object {name: 'UserPC2', type: 1})
+CREATE (o:Object {name: 'UserPC2', type: 1, description:'Стандартный персональный компьютер пользователя № 2'})
 SET o.obj_id = ID(o);
-CREATE (o:Object {name: 'UserPC3', type: 1})
+CREATE (o:Object {name: 'UserPC3', type: 1, description:'Стандартный персональный компьютер пользователя № 3'})
 SET o.obj_id = ID(o);
-CREATE (o:Object {name: 'UserPC4', type: 1})
+CREATE (o:Object {name: 'UserPC4', type: 1, description:'Стандартный персональный компьютер пользователя № 4'})
 SET o.obj_id = ID(o);
-CREATE (o:Object {name: 'UserPC5', type: 1})
+CREATE (o:Object {name: 'UserPC5', type: 1, description:'Стандартный персональный компьютер пользователя № 5'})
 SET o.obj_id = ID(o);
-CREATE (o:Object {name: 'UserPC6', type: 1})
+CREATE (o:Object {name: 'UserPC6', type: 1, description:'Стандартный персональный компьютер пользователя № 6'})
 SET o.obj_id = ID(o);
-CREATE (o:Object {name: 'WaterPump1', type: 2})
+CREATE (o:Object {name: 'WaterPump1', type: 2, description:'Водяной насос № 1 для охлаждения реактора'})
 SET o.obj_id = ID(o);
-CREATE (o:Object {name: 'WaterPump2', type: 2})
+CREATE (o:Object {name: 'WaterPump2', type: 2, description:'Водяной насос № 2 для охлаждения реактора'})
 SET o.obj_id = ID(o);
-CREATE (o:Object {name: 'CentralSync', type: 2})
+CREATE (o:Object {name: 'CentralSync', type: 2, description:'Центральная система синхронизации. Чрезвычайно важно!'})
 SET o.obj_id = ID(o);
 
 
@@ -157,7 +157,7 @@ CREATE (b)-[r:INFECTED_BY]->(a)
 RETURN a,b,r;
 
 
-CREATE (sch1:Scheme {name: 'Configuration N2', description: 'The second test configuration system'})
+CREATE (sch1:Scheme {name: 'Configuration N2', description: 'Вторая тестовая конфигурация системы'})
 SET sch1.scheme_id = ID(sch1);
 
 
@@ -175,10 +175,10 @@ CREATE (sch)-[r1:CONTAINS]->(v)
 RETURN sch,r1,v;
 
 
-CREATE (s:SecuritySW {name:"KasperskyUltimate", price:1000, description:"Kaspersky ultimate edition by Kaspersky labs. Created in 2021 by KasperskyLabs"})
+CREATE (s:SecuritySW {name:"KasperskyUltimate", price:1000, description:"Kaspersky ultimate edition от Kaspersky labs. Создан в 2021 году компанией KasperskyLabs"})
 SET s.secSW_id = ID(s);
 
-CREATE (s:SecuritySW {name:"WindowsDefender", price:600, description:"WindowsDefender free built-in Windows app providing security of personal computers. Created in 2020 by Windows Security labs"})
+CREATE (s:SecuritySW {name:"WindowsDefender", price:600, description:"WindowsDefender бесплатное встроенное приложение Windows, обеспечивающее безопасность персональных компьютеров. Создан в 2020 году компанией Windows Security labs"})
 SET s.secSW_id = ID(s);
 
 
@@ -195,13 +195,13 @@ CREATE (o)-[r1:PROTECTED_BY]->(s)
 RETURN s,r1,o;
 
 
-CREATE (se: Exploit {name: "SQL", description:"An SQL-injection security exploit"})
+CREATE (se: Exploit {name: "SQL", description:"Эксплойт безопасности. SQL-инъекции"})
 SET se.SE_id = ID(se);
 
-CREATE (se: Exploit {name: "Skript", description:"Windows skript autorun security exploit"})
+CREATE (se: Exploit {name: "Skript", description:"Эксплойт безопасности автозапуска скриптов в Windows страых версий"})
 SET se.SE_id = ID(se);
 
-CREATE (se: Exploit {name: "Stack overflow", description:"Stack overflow security exploit"})
+CREATE (se: Exploit {name: "Stack overflow", description:"Эксплойт безопасности переполнения стека"})
 SET se.SE_id = ID(se);
 
 

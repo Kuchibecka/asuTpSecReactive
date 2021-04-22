@@ -103,7 +103,6 @@ public class SchemeController {
                                     vi.getName()
                             );
                             nodeList.add(virus);
-                            System.out.println(nodeList);
                         }
                     }
                     return nodeList;

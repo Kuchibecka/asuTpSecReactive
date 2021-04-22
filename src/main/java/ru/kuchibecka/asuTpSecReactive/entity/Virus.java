@@ -24,6 +24,8 @@ public class Virus {
 
     private String name;
 
+    private String description;
+
     @Relationship(type = "USES_EXPLOIT", direction = Relationship.Direction.OUTGOING)
     private List<Exploit> virusExploit = new ArrayList<>();
 }

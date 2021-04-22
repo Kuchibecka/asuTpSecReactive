@@ -27,6 +27,8 @@ public class Object {
 
     private String name;
 
+    private String description;
+
     @Relationship(type = "INFECTED_BY", direction = Relationship.Direction.OUTGOING)
     private List<Virus> virusList = new ArrayList<>();
 
