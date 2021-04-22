@@ -32,7 +32,6 @@ public class ObjectController {
 
     @GetMapping("/by-name")
     Flux<Object> byName(@RequestParam("name") String name) {
-        System.out.println(name);
         return objectService.getObjectByName(name);
     }
 

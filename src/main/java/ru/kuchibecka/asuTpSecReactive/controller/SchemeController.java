@@ -36,7 +36,6 @@ public class SchemeController {
 
     @GetMapping("/by-name")
     Flux<Scheme> byName(@RequestParam("name") String name) {
-        System.out.println(name);
         return schemeService
                 .getObjectByName(name);
     }
@@ -93,13 +92,11 @@ public class SchemeController {
         return schemeService
                 .findById(id)
                 .flatMapIterable(a -> {
-                    System.out.println(a.getObjectList());
                     List<Object> objectList = a.getObjectList();
                     List<Virus> virusList;
                     List<Node> nodeList = new ArrayList<>();
                     for (Object o : objectList) {
                         virusList = o.getVirusList();
-                        System.out.println(virusList);
                         for (Virus vi : virusList) {
                             Node virus = new Node(
                                     "virus" + vi.getVirus_id().toString(),
