@@ -158,17 +158,19 @@ public class SchemeController {
                 });
     }
 
+    // todo: Добавить корневое соединение
+    // todo: Добавить лейблы (И, ИЛИ)
     @GetMapping("/{id}/fault_tree_relations")
     Flux<Relationship> getTreeRelationsById(@PathVariable Long id) {
         return schemeService
                 .findById(id)
                 .map(a -> {
-                    List<Object> objectList = a.getObjectList();
+                    List<Object> criteriaList = a.getCriteriaList();
                     List<Relationship> treeRelationshipList = new ArrayList<>();
-                    List<Object> connectedTo;
-                    for (Object o : objectList) {
-                        connectedTo = o.getAndCriteriaList();
-                        for (Object andObj : connectedTo) {
+                    List<Object> andConnection;
+                    for (Object o : criteriaList) {
+                        andConnection = o.getAndCriteriaList();
+                        for (Object andObj : andConnection) {
                             String relId = "e" + o.getObj_id() + "-" + andObj.getObj_id();
                             String type = "step";
                             boolean animated = false;
