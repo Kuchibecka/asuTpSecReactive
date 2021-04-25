@@ -9,12 +9,14 @@ public class Node {
     private String id;
 
     @Data
+    @AllArgsConstructor
     public class data {
         private String label;
     }
     private data data;
 
     @Data
+    @AllArgsConstructor
     public class position {
         private int x;
         private int y;
@@ -31,9 +33,14 @@ public class Node {
     public Node(String id, String data) {
         this.id = id;
         this.position = new position();
-        Node.data data1 = new data();
-        data1.label = data;
-        this.data = data1;
+        this.data = new data(data);
+    }
+
+    public Node(String id, String data, int x, int y) {
+        this.id = id;
+        this.position = new position();
+        this.data = new data(data);
+        this.position = new position(x, y);
     }
     //todo: Другие поля класса Object? Скорее всего не нужны
 }

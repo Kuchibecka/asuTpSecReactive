@@ -154,21 +154,31 @@ public class SchemeController {
                     List<Node> treeNodeList = new ArrayList<>();
                     Node root = new Node(
                             id + "treeRoot",
-                            "Отказ системы " + a.getName()
+                            "Отказ системы " + a.getName(),
+                            200,
+                            0
                     );
                     treeNodeList.add(root);
+                    int level3 = 0;
                     for (Object el : criteriaList) {
                         Node node = new Node(
                                 el.getObj_id().toString(),
-                                el.getName()
+                                el.getName(),
+                                level3,
+                                200
                         );
+                        level3+=200;
                         treeNodeList.add(node);
+                        int level2 = 300;
                         for (Object and : el.getAndCriteriaList()) {
                             Node andNode = new Node(
                                     el.getObj_id().toString() + "_" + and.getObj_id(),
-                                    "И"
+                                    "И",
+                                    level2,
+                                    100
                             );
                             treeNodeList.add(andNode);
+                            level2+=300;
                         }
                     }
                     return treeNodeList;
