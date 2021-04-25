@@ -35,5 +35,5 @@ public class Node {
         data1.label = data;
         this.data = data1;
     }
-    //todo: Другие поля класса Object?
+    //todo: Другие поля класса Object? Скорее всего не нужны
 }

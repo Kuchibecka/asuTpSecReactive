@@ -1,6 +1,5 @@
 package ru.kuchibecka.asuTpSecReactive.controller;
 
-import org.neo4j.driver.internal.value.ListValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -66,18 +65,20 @@ public class SchemeController {
                     List<Object> objectList = a.getObjectList();
                     List<Relationship> relationshipList = new ArrayList<>();
                     List<Object> connectedTo;
+                    final String TYPE = "default";
+                    final boolean ANIMATED = false;
+                    final Relationship.Style STYLE = new Relationship.Style("default");
                     for (Object o : objectList) {
                         connectedTo = o.getObjectList();
                         for (Object obj : connectedTo) {
                             String relId = "e" + o.getObj_id() + "-" + obj.getObj_id();
-                            String type = "straight";
-                            boolean animated = false;
                             Relationship relationship = new Relationship(
                                     relId,
                                     o.getObj_id().toString(), obj.getObj_id().toString(),
-                                    type,
-                                    animated,
-                                    new Relationship.Style("")
+                                    TYPE,
+                                    ANIMATED,
+                                    "",
+                                    STYLE
                             );
                             relationshipList.add(relationship);
                         }
@@ -97,6 +98,7 @@ public class SchemeController {
                     List<Node> nodeList = new ArrayList<>();
                     for (Object o : objectList) {
                         virusList = o.getVirusList();
+                        // System.out.println(virusList);
                         for (Virus vi : virusList) {
                             Node virus = new Node(
                                     "virus" + vi.getVirus_id().toString(),
@@ -118,19 +120,22 @@ public class SchemeController {
                     List<Object> objectList = a.getObjectList();
                     List<Relationship> infectionList = new ArrayList<>();
                     List<Virus> virusList;
+                    final String TYPE = "default";
+                    final boolean ANIMATED = true;
+                    final String LABEL = "заражает";
+                    final Relationship.Style STYLE = new Relationship.Style("red");
                     for (Object o : objectList) {
                         virusList = o.getVirusList();
                         for (Virus v : virusList) {
                             String virusId = "virus" + v.getVirus_id().toString();
                             String relId = "e" + virusId + "-" + o.getObj_id();
-                            String type = "default";
-                            boolean animated = true;
                             Relationship relationship = new Relationship(
                                     relId,
                                     virusId, o.getObj_id().toString(),
-                                    type,
-                                    animated,
-                                    new Relationship.Style("red")
+                                    TYPE,
+                                    ANIMATED,
+                                    LABEL,
+                                    STYLE
                             );
                             infectionList.add(relationship);
                         }
@@ -147,41 +152,85 @@ public class SchemeController {
                 .flatMapIterable(a -> {
                     List<Object> criteriaList = a.getCriteriaList();
                     List<Node> treeNodeList = new ArrayList<>();
+                    Node root = new Node(
+                            id + "treeRoot",
+                            "Отказ системы " + a.getName()
+                    );
+                    treeNodeList.add(root);
                     for (Object el : criteriaList) {
                         Node node = new Node(
                                 el.getObj_id().toString(),
                                 el.getName()
                         );
                         treeNodeList.add(node);
+                        for (Object and : el.getAndCriteriaList()) {
+                            Node andNode = new Node(
+                                    el.getObj_id().toString() + "_" + and.getObj_id(),
+                                    "И"
+                            );
+                            treeNodeList.add(andNode);
+                        }
                     }
                     return treeNodeList;
                 });
     }
 
-    // todo: Добавить корневое соединение
-    // todo: Добавить лейблы (И, ИЛИ)
     @GetMapping("/{id}/fault_tree_relations")
     Flux<Relationship> getTreeRelationsById(@PathVariable Long id) {
         return schemeService
                 .findById(id)
                 .map(a -> {
+                    final Relationship.Style STYLE = new Relationship.Style("black");
+                    final String TYPE = "step";
+                    final boolean ANIMATED = false;
                     List<Object> criteriaList = a.getCriteriaList();
                     List<Relationship> treeRelationshipList = new ArrayList<>();
                     List<Object> andConnection;
+                    List<Long> markedAnd = new ArrayList<>();
                     for (Object o : criteriaList) {
                         andConnection = o.getAndCriteriaList();
                         for (Object andObj : andConnection) {
                             String relId = "e" + o.getObj_id() + "-" + andObj.getObj_id();
-                            String type = "step";
-                            boolean animated = false;
-                            Relationship relationship = new Relationship(
-                                    relId,
-                                    o.getObj_id().toString(), andObj.getObj_id().toString(),
-                                    type,
-                                    animated,
-                                    new Relationship.Style("black")
+                            Relationship relationship1 = new Relationship(
+                                    relId + "_andSide1",
+                                    o.getObj_id().toString() + "_" + andObj.getObj_id().toString(), andObj.getObj_id().toString(),
+                                    TYPE,
+                                    ANIMATED,
+                                    "",
+                                    STYLE
                             );
-                            treeRelationshipList.add(relationship);
+                            treeRelationshipList.add(relationship1);
+                            Relationship relationship2 = new Relationship(
+                                    relId + "_andSide2",
+                                    o.getObj_id().toString() + "_" + andObj.getObj_id().toString(), o.getObj_id().toString(),
+                                    TYPE,
+                                    ANIMATED,
+                                    "",
+                                    STYLE
+                            );
+                            treeRelationshipList.add(relationship2);
+                            Relationship andToRoot = new Relationship(
+                                    relId + "_andToRoot",
+                                    id + "treeRoot", o.getObj_id().toString() + "_" + andObj.getObj_id().toString(),
+                                    TYPE,
+                                    ANIMATED,
+                                    "ИЛИ",
+                                    STYLE
+                            );
+                            treeRelationshipList.add(andToRoot);
+                            markedAnd.add(andObj.getObj_id());
+                            markedAnd.add(o.getObj_id());
+                        }
+                        if (andConnection.isEmpty() && !markedAnd.contains(o.getObj_id())) {
+                            Relationship orToRoot = new Relationship(
+                                    id + "_orToRoot",
+                                    id + "treeRoot", o.getObj_id().toString(),
+                                    TYPE,
+                                    ANIMATED,
+                                    "ИЛИ",
+                                    STYLE
+                            );
+                            treeRelationshipList.add(orToRoot);
                         }
                     }
                     return treeRelationshipList;

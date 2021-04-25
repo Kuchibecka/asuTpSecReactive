@@ -71,6 +71,12 @@ CREATE (o:Object {name: 'CentralSync', type: 2, description:'Центральн�
 SET o.obj_id = ID(o);
 
 
+MATCH (sch:Scheme) WITH sch
+MATCH (a:Object)
+  WHERE ((a.name = 'WaterPump1' or a.name = 'WaterPump2' or a.name = 'CentralSync') and sch.name = 'Configuration N2')
+CREATE (sch)-[:CONSISTS_OF]->(a)
+
+
 MATCH (a:Virus) WITH a
 MATCH (b:Virus)
   WHERE ((a.name = 'Worm') and b.name = 'UserPC1')

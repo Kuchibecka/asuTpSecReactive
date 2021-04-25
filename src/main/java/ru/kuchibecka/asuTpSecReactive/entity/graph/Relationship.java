@@ -23,8 +23,11 @@ public class Relationship {
 
     private boolean animated;
 
+    private String label;
+
     @Data
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class Style {
         private String stroke;
     }
