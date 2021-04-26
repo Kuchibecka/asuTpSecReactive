@@ -88,7 +88,7 @@ public class SchemeController {
                 });
     }
 
-    @PutMapping("/add_object/{id}")
+    @PutMapping("/add_criteria_object/{id}")
     Mono<Scheme> addSchemeCriteriaObject(@PathVariable Long id, @RequestBody Object object) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
@@ -138,9 +138,8 @@ public class SchemeController {
                 .flatMap(sch -> {
                     List<Object> newCriteriaObjectList = sch.getCriteriaList();
                     newCriteriaObjectList.remove(object);
-                    sch.setObjectList(newCriteriaObjectList);
+                    sch.setCriteriaList(newCriteriaObjectList);
                     return schemeService.save(sch);
                 });
     }
-    // todo: put-mapping: Удалить всё вышеперечисленное
 }

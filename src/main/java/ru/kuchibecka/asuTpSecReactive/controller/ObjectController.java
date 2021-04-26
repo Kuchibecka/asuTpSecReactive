@@ -6,8 +6,12 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.kuchibecka.asuTpSecReactive.entity.Object;
+import ru.kuchibecka.asuTpSecReactive.entity.SecuritySW;
+import ru.kuchibecka.asuTpSecReactive.entity.Virus;
 import ru.kuchibecka.asuTpSecReactive.repository.ObjectRepository;
 import ru.kuchibecka.asuTpSecReactive.service.ObjectService;
+
+import java.util.List;
 
 
 @RestController
@@ -58,6 +62,94 @@ public class ObjectController {
                 );
     }
 
-    // todo: put-mapping: 1) Связать объекты and-связью в дереве отказов; 2) Связать объект с SecuritySW; 3) Связать объект с Virus
+    @PutMapping("/add_virus/{id}")
+    Mono<Object> addVirusObject(@PathVariable Long id, @RequestBody Virus virus) {
+        return objectRepository.findById(id)
+                .flatMap(dbObject -> {
+                    List<Virus> newVirusList = dbObject.getVirusList();
+                    newVirusList.add(virus);
+                    dbObject.setVirusList(newVirusList);
+                    return objectService.save(dbObject);
+                });
+    }
+
+    @PutMapping("/add_securitysw/{id}")
+    Mono<Object> addSecuritySWObject(@PathVariable Long id, @RequestBody SecuritySW securitySW) {
+        return objectRepository.findById(id)
+                .flatMap(dbObject -> {
+                    List<SecuritySW> newSecuritySWList = dbObject.getSecuritySWList();
+                    newSecuritySWList.add(securitySW);
+                    dbObject.setSecuritySWList(newSecuritySWList);
+                    return objectService.save(dbObject);
+                });
+    }
+
+    @PutMapping("/add_object/{id}")
+    Mono<Object> addObjectObject(@PathVariable Long id, @RequestBody Object object) {
+        return objectRepository.findById(id)
+                .flatMap(dbObject -> {
+                    List<Object> newObjectList = dbObject.getObjectList();
+                    newObjectList.add(object);
+                    dbObject.setObjectList(newObjectList);
+                    return objectService.save(dbObject);
+                });
+    }
+
+    @PutMapping("/add_criteria_object/{id}")
+    Mono<Object> addCriteriaObject(@PathVariable Long id, @RequestBody Object object) {
+        return objectRepository.findById(id)
+                .flatMap(dbObject -> {
+                    List<Object> newCriteriaList = dbObject.getAndCriteriaList();
+                    newCriteriaList.add(object);
+                    dbObject.setAndCriteriaList(newCriteriaList);
+                    return objectService.save(dbObject);
+                });
+    }
+
+    @PutMapping("/remove_virus/{id}")
+    Mono<Object> removeVirusObject(@PathVariable Long id, @RequestBody Virus virus) {
+        return objectRepository.findById(id)
+                .flatMap(dbObject -> {
+                    List<Virus> newVirusList = dbObject.getVirusList();
+                    newVirusList.remove(virus);
+                    dbObject.setVirusList(newVirusList);
+                    return objectService.save(dbObject);
+                });
+    }
+
+    @PutMapping("/remove_securitysw/{id}")
+    Mono<Object> removeSecuritySWObject(@PathVariable Long id, @RequestBody SecuritySW securitySW) {
+        return objectRepository.findById(id)
+                .flatMap(dbObject -> {
+                    List<SecuritySW> newSecuritySWList = dbObject.getSecuritySWList();
+                    newSecuritySWList.remove(securitySW);
+                    dbObject.setSecuritySWList(newSecuritySWList);
+                    return objectService.save(dbObject);
+                });
+    }
+
+    @PutMapping("/remove_object/{id}")
+    Mono<Object> removeObjectObject(@PathVariable Long id, @RequestBody Object object) {
+        return objectRepository.findById(id)
+                .flatMap(dbObject -> {
+                    List<Object> newObjectList = dbObject.getObjectList();
+                    newObjectList.remove(object);
+                    dbObject.setObjectList(newObjectList);
+                    return objectService.save(dbObject);
+                });
+    }
+
+    @PutMapping("/remove_criteria_object/{id}")
+    Mono<Object> removeCriteriaObject(@PathVariable Long id, @RequestBody Object object) {
+        return objectRepository.findById(id)
+                .flatMap(dbObject -> {
+                    List<Object> newCriteriaList = dbObject.getAndCriteriaList();
+                    newCriteriaList.remove(object);
+                    dbObject.setAndCriteriaList(newCriteriaList);
+                    return objectService.save(dbObject);
+                });
+    }
+
+    // todo: put-mapping: 1) Связать объекты просто и and-связью в дереве отказов; 2) Связать объект с SecuritySW; 3) Связать объект с Virus
     // todo: put-mapping: Удалить всё вышеперечисленное
 }
