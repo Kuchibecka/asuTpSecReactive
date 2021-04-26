@@ -56,10 +56,9 @@ public class SchemeController {
     // todo: 1) Протестить
     // todo: 2) Реализовать добавление вируса, СЗИ, объекта в дерево отказов схемы
     @PutMapping("/add_object/{id}")
-    Mono<Scheme> addSchemeObject(@PathVariable Long id, @RequestBody Scheme scheme, @RequestBody Object object) {
+    Mono<Scheme> addSchemeObject(@PathVariable Long id, @RequestBody Object object) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
-                    BeanUtils.copyProperties(scheme, sch);
                     List<Object> newObjectList = sch.getObjectList();
                     newObjectList.add(object);
                     sch.setObjectList(newObjectList);
@@ -68,10 +67,9 @@ public class SchemeController {
     }
 
     @PutMapping("/add_virus/{id}")
-    Mono<Scheme> addSchemeVirus(@PathVariable Long id, @RequestBody Scheme scheme, @RequestBody Virus virus) {
+    Mono<Scheme> addSchemeVirus(@PathVariable Long id, @RequestBody Virus virus) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
-                    BeanUtils.copyProperties(scheme, sch);
                     List<Virus> newVirusList = sch.getVirusList();
                     newVirusList.add(virus);
                     sch.setVirusList(newVirusList);
@@ -80,10 +78,9 @@ public class SchemeController {
     }
 
     @PutMapping("/add_securitysw/{id}")
-    Mono<Scheme> addSchemeSecuritySW(@PathVariable Long id, @RequestBody Scheme scheme, @RequestBody SecuritySW securitySW) {
+    Mono<Scheme> addSchemeSecuritySW(@PathVariable Long id, @RequestBody SecuritySW securitySW) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
-                    BeanUtils.copyProperties(scheme, sch);
                     List<SecuritySW> newSecuritySWList = sch.getSecuritySWList();
                     newSecuritySWList.add(securitySW);
                     sch.setSecuritySWList(newSecuritySWList);
@@ -92,12 +89,55 @@ public class SchemeController {
     }
 
     @PutMapping("/add_object/{id}")
-    Mono<Scheme> addSchemeCriteriaObject(@PathVariable Long id, @RequestBody Scheme scheme, @RequestBody Object object) {
+    Mono<Scheme> addSchemeCriteriaObject(@PathVariable Long id, @RequestBody Object object) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
-                    BeanUtils.copyProperties(scheme, sch);
                     List<Object> newCriteriaObjectList = sch.getCriteriaList();
                     newCriteriaObjectList.add(object);
+                    sch.setObjectList(newCriteriaObjectList);
+                    return schemeService.save(sch);
+                });
+    }
+
+    @PutMapping("/remove_object/{id}")
+    Mono<Scheme> removeSchemeObject(@PathVariable Long id, @RequestBody Object object) {
+        return schemeService.findById(id)
+                .flatMap(sch -> {
+                    List<Object> newObjectList = sch.getObjectList();
+                    newObjectList.remove(object);
+                    sch.setObjectList(newObjectList);
+                    return schemeService.save(sch);
+                });
+    }
+
+    @PutMapping("/remove_virus/{id}")
+    Mono<Scheme> removeSchemeVirus(@PathVariable Long id, @RequestBody Virus virus) {
+        return schemeService.findById(id)
+                .flatMap(sch -> {
+                    List<Virus> newVirusList = sch.getVirusList();
+                    newVirusList.remove(virus);
+                    sch.setVirusList(newVirusList);
+                    return schemeService.save(sch);
+                });
+    }
+
+    @PutMapping("/remove_securitysw/{id}")
+    Mono<Scheme> removeSchemeSecuritySW(@PathVariable Long id, @RequestBody SecuritySW securitySW) {
+        return schemeService.findById(id)
+                .flatMap(sch -> {
+                    List<SecuritySW> newSecuritySWList = sch.getSecuritySWList();
+                    newSecuritySWList.remove(securitySW);
+                    sch.setSecuritySWList(newSecuritySWList);
+                    return schemeService.save(sch);
+                });
+    }
+
+    @PutMapping("/remove_criteria_object/{id}")
+    Mono<Scheme> removeSchemeCriteriaObject(@PathVariable Long id, @RequestBody Object object) {
+        return schemeService.findById(id)
+                .flatMap(sch -> {
+                    List<Object> newCriteriaObjectList = sch.getCriteriaList();
+                    newCriteriaObjectList.remove(object);
                     sch.setObjectList(newCriteriaObjectList);
                     return schemeService.save(sch);
                 });
