@@ -53,6 +53,14 @@ public class SchemeController {
                 });
     }
 
+    @DeleteMapping("/delete/{id}")
+    Mono<Void> deleteScheme(@PathVariable Long id) {
+        return schemeService.findById(id)
+                .flatMap(scheme ->
+                        schemeService.delete(scheme)
+                );
+    }
+
     // todo: 1) Протестить
     // todo: 2) Реализовать добавление вируса, СЗИ, объекта в дерево отказов схемы
     @PutMapping("/add_object/{id}")

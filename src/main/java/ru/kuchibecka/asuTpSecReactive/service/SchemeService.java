@@ -31,4 +31,8 @@ public class SchemeService {
     public Mono<Scheme> save(Scheme scheme) {
         return schemeRepository.save(scheme);
     }
+
+    public Mono<Void> delete(Scheme scheme) {
+        return schemeRepository.delete(scheme);
+    }
 }
