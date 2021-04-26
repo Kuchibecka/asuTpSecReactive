@@ -29,4 +29,3 @@ public class Virus {
     @Relationship(type = "USES_EXPLOIT", direction = Relationship.Direction.OUTGOING)
     private List<Exploit> virusExploit = new ArrayList<>();
 }
-//todo: написать оснастку (репо, сервис, контроллер)

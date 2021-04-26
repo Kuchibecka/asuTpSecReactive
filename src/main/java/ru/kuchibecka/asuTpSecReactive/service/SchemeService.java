@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import ru.kuchibecka.asuTpSecReactive.entity.Object;
 import ru.kuchibecka.asuTpSecReactive.entity.Scheme;
 import ru.kuchibecka.asuTpSecReactive.repository.SchemeRepository;
 
@@ -13,7 +14,7 @@ public class SchemeService {
     @Autowired
     SchemeRepository schemeRepository;
 
-    public Flux<Scheme> getObjectByName(String name) {
+    public Flux<Scheme> getSchemeByName(String name) {
         return schemeRepository
                 .findAll()
                 .filter(scheme -> scheme.getName().contains(name));
@@ -25,5 +26,9 @@ public class SchemeService {
 
     public Mono<Scheme> findById(Long id) {
         return schemeRepository.findById(id);
+    }
+
+    public Mono<Scheme> save(Scheme scheme) {
+        return schemeRepository.save(scheme);
     }
 }

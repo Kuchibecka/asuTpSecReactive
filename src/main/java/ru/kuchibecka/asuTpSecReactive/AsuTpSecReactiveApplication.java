@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @EnableAsync
 @Configuration				// todo: ???	https://spring-projects.ru/guides/accessing-data-neo4j/
-@EnableNeo4jRepositories	// todo: ???
+@EnableNeo4jRepositories
 public class AsuTpSecReactiveApplication {
 
 	public static void main(String[] args) {

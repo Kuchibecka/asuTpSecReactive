@@ -188,6 +188,13 @@ CREATE (s:SecuritySW {name:"WindowsDefender", price:600, description:"WindowsDef
 SET s.secSW_id = ID(s);
 
 
+MATCH (sw:SecuritySW) WITH sw
+MATCH (sch:Scheme)
+  WHERE ((sw.name ='KasperskyUltimate' OR sw.name ='WindowsDefender') AND sch.name = 'Configuration N2')
+CREATE (sch)-[r1:SECURED_BY]->(sw)
+RETURN sch, r1, sw;
+
+
 MATCH (o:Object) WITH o
 MATCH (s:SecuritySW)
   WHERE (o.name ="UserPC3" and s.name ="WindowsDefender")

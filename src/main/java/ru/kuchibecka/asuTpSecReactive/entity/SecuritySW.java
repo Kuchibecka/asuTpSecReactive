@@ -31,4 +31,3 @@ public class SecuritySW {
     @Relationship(type = "PREVENTS_EXPLOIT", direction = Relationship.Direction.OUTGOING)
     private List<Exploit> securityExploit = new ArrayList<>();
 }
-//todo: написать оснастку (репо, сервис, контроллер)

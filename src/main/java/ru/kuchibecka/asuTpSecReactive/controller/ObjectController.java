@@ -57,4 +57,7 @@ public class ObjectController {
                                 .then(Mono.just(true))
                 );
     }
+
+    // todo: put-mapping: 1) Связать объекты and-связью в дереве отказов; 2) Связать объект с SecuritySW; 3) Связать объект с Virus
+    // todo: put-mapping: Удалить всё вышеперечисленное
 }

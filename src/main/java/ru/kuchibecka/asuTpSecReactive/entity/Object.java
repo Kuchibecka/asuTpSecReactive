@@ -50,4 +50,3 @@ public class Object {
         this.andCriteriaList = andCriteriaList;
     }
 }
-//todo: проверить на полноту оснастку (репо, сервис, контроллер)

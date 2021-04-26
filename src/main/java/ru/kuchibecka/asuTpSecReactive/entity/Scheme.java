@@ -29,11 +29,13 @@ public class Scheme {
     @Relationship(type = "CONSISTS_OF", direction = Relationship.Direction.OUTGOING)
     private List<Object> objectList = new ArrayList<>();
 
-    // todo: убрать из-за неиспользования?
     @Relationship(type = "CONTAINS", direction = Relationship.Direction.OUTGOING)
     private List<Virus> virusList = new ArrayList<>();
+
+    // todo: Добавить связь SECURED_BY, отредактировать init.cyp
+    @Relationship(type = "SECURED_BY", direction = Relationship.Direction.OUTGOING)
+    private List<SecuritySW> securitySWList = new ArrayList<>();
 
     @Relationship(type = "FAILS_AT", direction = Relationship.Direction.OUTGOING)
     private List<Object> criteriaList = new ArrayList<>();
 }
-//todo: написать оснастку (репо, сервис, контроллер)
