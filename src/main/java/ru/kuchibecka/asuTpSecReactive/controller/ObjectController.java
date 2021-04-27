@@ -40,7 +40,7 @@ public class ObjectController {
         return objectService.save(object);
     }
 
-    @PutMapping("/edit/{id}")
+    @PutMapping("/{id}/edit/")
     Mono<Object> updateObject(@PathVariable Long id, @RequestBody Object object) {
         return objectService.findById(id)
                 .flatMap(dbObject -> {
@@ -49,7 +49,7 @@ public class ObjectController {
                 });
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}/delete/")
     Mono<Void> deleteObject(@PathVariable Long id) {
         return objectService.findById(id)
                 .flatMap(object ->
@@ -57,7 +57,7 @@ public class ObjectController {
                 );
     }
 
-    @PutMapping("/add_virus/{id}")
+    @PutMapping("/{id}/add_virus/")
     Mono<Object> addVirusObject(@PathVariable Long id, @RequestBody Virus virus) {
         return objectService.findById(id)
                 .flatMap(dbObject -> {
@@ -68,7 +68,7 @@ public class ObjectController {
                 });
     }
 
-    @PutMapping("/add_securitysw/{id}")
+    @PutMapping("/{id}/add_securitysw/")
     Mono<Object> addSecuritySWObject(@PathVariable Long id, @RequestBody SecuritySW securitySW) {
         return objectService.findById(id)
                 .flatMap(dbObject -> {
@@ -79,7 +79,7 @@ public class ObjectController {
                 });
     }
 
-    @PutMapping("/add_object/{id}")
+    @PutMapping("/{id}/add_object/")
     Mono<Object> addObjectObject(@PathVariable Long id, @RequestBody Object object) {
         return objectService.findById(id)
                 .flatMap(dbObject -> {
@@ -90,7 +90,7 @@ public class ObjectController {
                 });
     }
 
-    @PutMapping("/add_criteria_object/{id}")
+    @PutMapping("/{id}/add_criteria_object/")
     Mono<Object> addCriteriaObject(@PathVariable Long id, @RequestBody Object object) {
         return objectService.findById(id)
                 .flatMap(dbObject -> {
@@ -101,7 +101,7 @@ public class ObjectController {
                 });
     }
 
-    @PutMapping("/remove_virus/{id}")
+    @PutMapping("/{id}/remove_virus/")
     Mono<Object> removeVirusObject(@PathVariable Long id, @RequestBody Virus virus) {
         return objectService.findById(id)
                 .flatMap(dbObject -> {
@@ -112,7 +112,7 @@ public class ObjectController {
                 });
     }
 
-    @PutMapping("/remove_securitysw/{id}")
+    @PutMapping("/{id}/remove_securitysw/")
     Mono<Object> removeSecuritySWObject(@PathVariable Long id, @RequestBody SecuritySW securitySW) {
         return objectService.findById(id)
                 .flatMap(dbObject -> {
@@ -123,7 +123,7 @@ public class ObjectController {
                 });
     }
 
-    @PutMapping("/remove_object/{id}")
+    @PutMapping("/{id}/remove_object/")
     Mono<Object> removeObjectObject(@PathVariable Long id, @RequestBody Object object) {
         return objectService.findById(id)
                 .flatMap(dbObject -> {
@@ -134,7 +134,7 @@ public class ObjectController {
                 });
     }
 
-    @PutMapping("/remove_criteria_object/{id}")
+    @PutMapping("/{id}/remove_criteria_object/")
     Mono<Object> removeCriteriaObject(@PathVariable Long id, @RequestBody Object object) {
         return objectService.findById(id)
                 .flatMap(dbObject -> {

@@ -38,7 +38,7 @@ public class SecuritySWController {
         return securitySWService.save(securitySW);
     }
 
-    @PutMapping("/edit/{id}")
+    @PutMapping("/{id}/edit/")
     Mono<SecuritySW> updateSecuritySW(@PathVariable Long id, @RequestBody SecuritySW securitySW) {
         return securitySWService.findById(id)
                 .flatMap(dbSecuritySW -> {
@@ -47,7 +47,7 @@ public class SecuritySWController {
                 });
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}/delete/")
     Mono<Void> deleteSecuritySW(@PathVariable Long id) {
         return securitySWService.findById(id)
                 .flatMap(SecuritySW ->
@@ -55,7 +55,7 @@ public class SecuritySWController {
                 );
     }
 
-    @PutMapping("/add_exploit/{id}")
+    @PutMapping("/{id}/add_exploit/")
     Mono<SecuritySW> addSecuritySWExploit(@PathVariable Long id, @RequestBody Exploit exploit) {
         return securitySWService.findById(id)
                 .flatMap(dbSecuritySW -> {

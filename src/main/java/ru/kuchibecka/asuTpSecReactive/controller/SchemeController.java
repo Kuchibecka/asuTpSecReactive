@@ -44,7 +44,7 @@ public class SchemeController {
         return schemeService.save(scheme);
     }
 
-    @PutMapping("/edit/{id}")
+    @PutMapping("/{id}/edit/")
     Mono<Scheme> updateScheme(@PathVariable Long id, @RequestBody Scheme scheme) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
@@ -53,7 +53,7 @@ public class SchemeController {
                 });
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}/delete/")
     Mono<Void> deleteScheme(@PathVariable Long id) {
         return schemeService.findById(id)
                 .flatMap(scheme ->
@@ -61,9 +61,7 @@ public class SchemeController {
                 );
     }
 
-    // todo: 1) Протестить
-    // todo: 2) Реализовать добавление вируса, СЗИ, объекта в дерево отказов схемы
-    @PutMapping("/add_object/{id}")
+    @PutMapping("/{id}/add_object/")
     Mono<Scheme> addSchemeObject(@PathVariable Long id, @RequestBody Object object) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
@@ -74,7 +72,7 @@ public class SchemeController {
                 });
     }
 
-    @PutMapping("/add_virus/{id}")
+    @PutMapping("/{id}/add_virus/")
     Mono<Scheme> addSchemeVirus(@PathVariable Long id, @RequestBody Virus virus) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
@@ -85,7 +83,7 @@ public class SchemeController {
                 });
     }
 
-    @PutMapping("/add_securitysw/{id}")
+    @PutMapping("/{id}/add_securitysw/")
     Mono<Scheme> addSchemeSecuritySW(@PathVariable Long id, @RequestBody SecuritySW securitySW) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
@@ -96,7 +94,7 @@ public class SchemeController {
                 });
     }
 
-    @PutMapping("/add_criteria_object/{id}")
+    @PutMapping("/{id}/add_criteria_object/")
     Mono<Scheme> addSchemeCriteriaObject(@PathVariable Long id, @RequestBody Object object) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
@@ -107,7 +105,7 @@ public class SchemeController {
                 });
     }
 
-    @PutMapping("/remove_object/{id}")
+    @PutMapping("/{id}/remove_object/")
     Mono<Scheme> removeSchemeObject(@PathVariable Long id, @RequestBody Object object) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
@@ -118,7 +116,7 @@ public class SchemeController {
                 });
     }
 
-    @PutMapping("/remove_virus/{id}")
+    @PutMapping("/{id}/remove_virus/")
     Mono<Scheme> removeSchemeVirus(@PathVariable Long id, @RequestBody Virus virus) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
@@ -129,7 +127,7 @@ public class SchemeController {
                 });
     }
 
-    @PutMapping("/remove_securitysw/{id}")
+    @PutMapping("/{id}/remove_securitysw/")
     Mono<Scheme> removeSchemeSecuritySW(@PathVariable Long id, @RequestBody SecuritySW securitySW) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
@@ -140,7 +138,7 @@ public class SchemeController {
                 });
     }
 
-    @PutMapping("/remove_criteria_object/{id}")
+    @PutMapping("/{id}/remove_criteria_object/")
     Mono<Scheme> removeSchemeCriteriaObject(@PathVariable Long id, @RequestBody Object object) {
         return schemeService.findById(id)
                 .flatMap(sch -> {

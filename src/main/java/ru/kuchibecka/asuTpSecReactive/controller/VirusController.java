@@ -23,7 +23,7 @@ public class VirusController {
         return virusService.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/")
     Mono<Virus> getById(@PathVariable Long id) {
         return virusService.findById(id);
     }
@@ -38,7 +38,7 @@ public class VirusController {
         return virusService.save(Virus);
     }
 
-    @PutMapping("/edit/{id}")
+    @PutMapping("/{id}/edit/")
     Mono<Virus> updateVirus(@PathVariable Long id, @RequestBody Virus Virus) {
         return virusService.findById(id)
                 .flatMap(dbVirus -> {
@@ -47,7 +47,7 @@ public class VirusController {
                 });
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}/delete/")
     Mono<Void> deleteVirus(@PathVariable Long id) {
         return virusService.findById(id)
                 .flatMap(Virus ->
@@ -55,7 +55,7 @@ public class VirusController {
                 );
     }
 
-    @PutMapping("/add_virus/{id}")
+    @PutMapping("/{id}/add_exploit/")
     Mono<Virus> addVirusExploit(@PathVariable Long id, @RequestBody Exploit exploit) {
         return virusService.findById(id)
                 .flatMap(dbVirus -> {
