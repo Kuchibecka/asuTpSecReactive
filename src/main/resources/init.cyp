@@ -74,7 +74,7 @@ SET o.obj_id = ID(o);
 MATCH (sch:Scheme) WITH sch
 MATCH (a:Object)
   WHERE ((a.name = 'WaterPump1' or a.name = 'WaterPump2' or a.name = 'CentralSync') and sch.name = 'Configuration N2')
-CREATE (sch)-[:CONSISTS_OF]->(a)
+CREATE (sch)-[:CONSISTS_OF]->(a);
 
 
 MATCH (a:Virus) WITH a
@@ -248,10 +248,11 @@ MATCH (sch:Scheme) WITH sch
 MATCH (o:Object)
   WHERE ((sch.name = "Configuration N2") AND (o.name = "WaterPump1" OR o.name = "WaterPump2" OR o.name = "CentralSync"))
 CREATE (sch)-[:FAILS_AT]->(o)
+RETURN sch, o;
 
 MATCH (o:Object) WITH o
 MATCH (o1:Object)
   WHERE (o.name = "WaterPump1" AND o1.name = "WaterPump2")
 CREATE (o1)-[:AND]->(o)
-
+RETURN o1, o;
 
