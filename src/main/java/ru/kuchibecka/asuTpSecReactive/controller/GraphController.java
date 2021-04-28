@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import ru.kuchibecka.asuTpSecReactive.entity.Object;
+import ru.kuchibecka.asuTpSecReactive.entity.SecuritySW;
 import ru.kuchibecka.asuTpSecReactive.entity.Virus;
 import ru.kuchibecka.asuTpSecReactive.entity.graph.Node;
 import ru.kuchibecka.asuTpSecReactive.entity.graph.Relationship;
@@ -121,6 +122,62 @@ public class GraphController {
                         }
                     }
                     return infectionList;
+                })
+                .flatMapMany(Flux::fromIterable);
+    }
+
+    @GetMapping("/{id}/securitysws")
+    Flux<Node> getSecuritySWsById(@PathVariable Long id) {
+        return schemeService
+                .findById(id)
+                .flatMapIterable(a -> {
+                    List<Object> objectList = a.getObjectList();
+                    List<SecuritySW> securitySWList;
+                    List<Node> nodeList = new ArrayList<>();
+                    for (Object o : objectList) {
+                        securitySWList = o.getSecuritySWList();
+                        for (SecuritySW sw : securitySWList) {
+                            Node virus = new Node(
+                                    "securitySW" + sw.getSecSW_id().toString(),
+                                    sw.getName()
+                            );
+                            nodeList.add(virus);
+                        }
+                    }
+                    return nodeList;
+                });
+    }
+
+
+    @GetMapping("/{id}/protections")
+    Flux<Relationship> getProtectionsById(@PathVariable Long id) {
+        return schemeService
+                .findById(id)
+                .map(a -> {
+                    List<Object> objectList = a.getObjectList();
+                    List<Relationship> protectionList = new ArrayList<>();
+                    List<SecuritySW> securitySWList;
+                    final String TYPE = "default";
+                    final boolean ANIMATED = true;
+                    final String LABEL = "защищает";
+                    final Relationship.Style STYLE = new Relationship.Style("blue");
+                    for (Object o : objectList) {
+                        securitySWList = o.getSecuritySWList();
+                        for (SecuritySW sw : securitySWList) {
+                            String virusId = "securitySW" + sw.getSecSW_id().toString();
+                            String relId = "e" + virusId + "-" + o.getObj_id();
+                            Relationship relationship = new Relationship(
+                                    relId,
+                                    virusId, o.getObj_id().toString(),
+                                    TYPE,
+                                    ANIMATED,
+                                    LABEL,
+                                    STYLE
+                            );
+                            protectionList.add(relationship);
+                        }
+                    }
+                    return protectionList;
                 })
                 .flatMapMany(Flux::fromIterable);
     }
