@@ -32,7 +32,6 @@ public class Scheme {
     @Relationship(type = "CONTAINS", direction = Relationship.Direction.OUTGOING)
     private List<Virus> virusList = new ArrayList<>();
 
-    // todo: Добавить связь SECURED_BY, отредактировать init.cyp
     @Relationship(type = "SECURED_BY", direction = Relationship.Direction.OUTGOING)
     private List<SecuritySW> securitySWList = new ArrayList<>();
 

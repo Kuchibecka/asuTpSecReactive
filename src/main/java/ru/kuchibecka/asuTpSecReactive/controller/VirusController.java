@@ -23,7 +23,7 @@ public class VirusController {
         return virusService.findAll();
     }
 
-    @GetMapping("/{id}/")
+    @GetMapping("/{id}")
     Mono<Virus> getById(@PathVariable Long id) {
         return virusService.findById(id);
     }
