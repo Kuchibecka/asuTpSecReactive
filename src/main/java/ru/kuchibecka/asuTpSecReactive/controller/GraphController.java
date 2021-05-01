@@ -268,7 +268,9 @@ public class GraphController {
                             markedAnd.add(andObj.getObj_id());
                             markedAnd.add(o.getObj_id());
                         }
-                        if (andConnection.isEmpty() && !markedAnd.contains(o.getObj_id())) {
+                    }
+                    for (Object o : criteriaList) {
+                        if (!markedAnd.contains(o.getObj_id())) {
                             Relationship orToRoot = new Relationship(
                                     id + "_orToRoot",
                                     id + "treeRoot", o.getObj_id().toString(),
