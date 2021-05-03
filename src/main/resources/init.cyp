@@ -73,7 +73,17 @@ SET o.obj_id = ID(o);
 
 MATCH (sch:Scheme) WITH sch
 MATCH (a:Object)
-  WHERE ((a.name = 'WaterPump1' or a.name = 'WaterPump2' or a.name = 'CentralSync') and sch.name = 'Configuration N2')
+  WHERE (a.name = 'WaterPump1' and sch.name = 'Configuration N2')
+CREATE (sch)-[:CONSISTS_OF]->(a);
+
+MATCH (sch:Scheme) WITH sch
+MATCH (a:Object)
+  WHERE (a.name = 'WaterPump2' and sch.name = 'Configuration N2')
+CREATE (sch)-[:CONSISTS_OF]->(a);
+
+MATCH (sch:Scheme) WITH sch
+MATCH (a:Object)
+  WHERE (a.name = 'CentralSync' and sch.name = 'Configuration N2')
 CREATE (sch)-[:CONSISTS_OF]->(a);
 
 
@@ -172,6 +182,8 @@ MATCH (sch:Scheme)
   WHERE ((a.name =~ 'UserPC.*') and (sch.name = 'Configuration N2'))
 CREATE (sch)-[r1:CONSISTS_OF]->(a)
 RETURN sch,a,r1;
+
+
 
 
 MATCH (v:Virus) WITH v
