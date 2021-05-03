@@ -7,6 +7,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.kuchibecka.asuTpSecReactive.entity.Exploit;
 import ru.kuchibecka.asuTpSecReactive.entity.Virus;
+import ru.kuchibecka.asuTpSecReactive.service.ExploitService;
 import ru.kuchibecka.asuTpSecReactive.service.VirusService;
 
 import java.util.List;
@@ -17,6 +18,9 @@ import java.util.List;
 public class VirusController {
     @Autowired
     private VirusService virusService;
+
+    @Autowired
+    private ExploitService exploitService;
 
     @GetMapping(path = "")
     Flux<Virus> getViruses() {
@@ -55,13 +59,30 @@ public class VirusController {
                 );
     }
 
-    @PutMapping("/{id}/add_exploit/")
-    Mono<Virus> addVirusExploit(@PathVariable Long id, @RequestBody Exploit exploit) {
+    @PutMapping("/{id}/add_exploit/{expId}")
+    Mono<Virus> addVirusExploit(@PathVariable Long id, @PathVariable Long expId) {
         return virusService.findById(id)
                 .flatMap(dbVirus -> {
                     List<Exploit> newExploitList = dbVirus.getVirusExploit();
-                    newExploitList.add(exploit);
-                    dbVirus.setVirusExploit(newExploitList);
+                    exploitService.findById(expId)
+                            .subscribe(v -> {
+                                newExploitList.add(v);
+                                dbVirus.setVirusExploit(newExploitList);
+                            });
+                    return virusService.save(dbVirus);
+                });
+    }
+
+    @PutMapping("/{id}/remove_exploit/{expId}")
+    Mono<Virus> removeVirusExploit(@PathVariable Long id, @PathVariable Long expId) {
+        return virusService.findById(id)
+                .flatMap(dbVirus -> {
+                    List<Exploit> newExploitList = dbVirus.getVirusExploit();
+                    exploitService.findById(expId)
+                            .subscribe(v -> {
+                                newExploitList.remove(v);
+                                dbVirus.setVirusExploit(newExploitList);
+                            });
                     return virusService.save(dbVirus);
                 });
     }

@@ -9,7 +9,10 @@ import ru.kuchibecka.asuTpSecReactive.entity.Object;
 import ru.kuchibecka.asuTpSecReactive.entity.Scheme;
 import ru.kuchibecka.asuTpSecReactive.entity.SecuritySW;
 import ru.kuchibecka.asuTpSecReactive.entity.Virus;
+import ru.kuchibecka.asuTpSecReactive.service.ObjectService;
 import ru.kuchibecka.asuTpSecReactive.service.SchemeService;
+import ru.kuchibecka.asuTpSecReactive.service.SecuritySWService;
+import ru.kuchibecka.asuTpSecReactive.service.VirusService;
 
 import java.util.List;
 
@@ -20,6 +23,15 @@ import java.util.List;
 public class SchemeController {
     @Autowired
     private SchemeService schemeService;
+
+    @Autowired
+    private ObjectService objectService;
+
+    @Autowired
+    private VirusService virusService;
+
+    @Autowired
+    private SecuritySWService securitySWService;
 
     @GetMapping(path = "")
     Flux<Scheme> getSchemes() {
@@ -61,90 +73,116 @@ public class SchemeController {
                 );
     }
 
-    @PutMapping("/{id}/add_object/")
-    Mono<Scheme> addSchemeObject(@PathVariable Long id, @RequestBody Object object) {
+    //todo: НОВЫЙ
+    @PutMapping("/{id}/add_object/{objId}")
+    Mono<Scheme> addSchemeObject(@PathVariable Long id, @PathVariable Long objId) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
                     List<Object> newObjectList = sch.getObjectList();
-                    newObjectList.add(object);
-                    sch.setObjectList(newObjectList);
+                    objectService.findById(objId)
+                            .subscribe(v -> {
+                                newObjectList.add(v);
+                                sch.setObjectList(newObjectList);
+                            });
                     return schemeService.save(sch);
                 });
     }
+    //todo: НОВЫЙ
 
-    @PutMapping("/{id}/add_virus/")
-    Mono<Scheme> addSchemeVirus(@PathVariable Long id, @RequestBody Virus virus) {
+    @PutMapping("/{id}/add_virus/{virusId}")
+    Mono<Scheme> addSchemeVirus(@PathVariable Long id, @PathVariable Long virusId) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
                     List<Virus> newVirusList = sch.getVirusList();
-                    newVirusList.add(virus);
-                    sch.setVirusList(newVirusList);
+                    virusService.findById(virusId)
+                            .subscribe(v -> {
+                                newVirusList.add(v);
+                                sch.setVirusList(newVirusList);
+                            });
                     return schemeService.save(sch);
                 });
     }
 
-    @PutMapping("/{id}/add_securitysw/")
-    Mono<Scheme> addSchemeSecuritySW(@PathVariable Long id, @RequestBody SecuritySW securitySW) {
+    @PutMapping("/{id}/add_securitysw/{secSwId}")
+    Mono<Scheme> addSchemeSecuritySW(@PathVariable Long id, @PathVariable Long secSwId) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
                     List<SecuritySW> newSecuritySWList = sch.getSecuritySWList();
-                    newSecuritySWList.add(securitySW);
-                    sch.setSecuritySWList(newSecuritySWList);
+                    securitySWService.findById(secSwId)
+                            .subscribe(v -> {
+                                newSecuritySWList.add(v);
+                                sch.setSecuritySWList(newSecuritySWList);
+                            });
                     return schemeService.save(sch);
                 });
     }
 
-    @PutMapping("/{id}/add_criteria_object/")
-    Mono<Scheme> addSchemeCriteriaObject(@PathVariable Long id, @RequestBody Object object) {
+    @PutMapping("/{id}/add_criteria_object/{crObjId}")
+    Mono<Scheme> addSchemeCriteriaObject(@PathVariable Long id, @PathVariable Long crObjId) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
                     List<Object> newCriteriaObjectList = sch.getCriteriaList();
-                    newCriteriaObjectList.add(object);
-                    sch.setObjectList(newCriteriaObjectList);
+                    objectService.findById(crObjId)
+                            .subscribe(v -> {
+                                newCriteriaObjectList.add(v);
+                                sch.setCriteriaList(newCriteriaObjectList);
+                            });
                     return schemeService.save(sch);
                 });
     }
 
-    @PutMapping("/{id}/remove_object/")
-    Mono<Scheme> removeSchemeObject(@PathVariable Long id, @RequestBody Object object) {
+    @PutMapping("/{id}/remove_object/{objId}")
+    Mono<Scheme> removeSchemeObject(@PathVariable Long id, @PathVariable Long objId) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
                     List<Object> newObjectList = sch.getObjectList();
-                    newObjectList.remove(object);
-                    sch.setObjectList(newObjectList);
+                    objectService.findById(objId)
+                            .subscribe(v -> {
+                                newObjectList.remove(v);
+                                sch.setObjectList(newObjectList);
+                            });
                     return schemeService.save(sch);
                 });
     }
 
-    @PutMapping("/{id}/remove_virus/")
-    Mono<Scheme> removeSchemeVirus(@PathVariable Long id, @RequestBody Virus virus) {
+    @PutMapping("/{id}/remove_virus/{virusId}")
+    Mono<Scheme> removeSchemeVirus(@PathVariable Long id, @PathVariable Long virusId) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
                     List<Virus> newVirusList = sch.getVirusList();
-                    newVirusList.remove(virus);
-                    sch.setVirusList(newVirusList);
+                    virusService.findById(virusId)
+                            .subscribe(v -> {
+                                newVirusList.remove(v);
+                                sch.setVirusList(newVirusList);
+                            });
                     return schemeService.save(sch);
                 });
     }
 
     @PutMapping("/{id}/remove_securitysw/")
-    Mono<Scheme> removeSchemeSecuritySW(@PathVariable Long id, @RequestBody SecuritySW securitySW) {
+    Mono<Scheme> removeSchemeSecuritySW(@PathVariable Long id, @PathVariable Long secSwId) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
                     List<SecuritySW> newSecuritySWList = sch.getSecuritySWList();
-                    newSecuritySWList.remove(securitySW);
-                    sch.setSecuritySWList(newSecuritySWList);
+                    securitySWService.findById(secSwId)
+                            .subscribe(v -> {
+                                newSecuritySWList.remove(v);
+                                sch.setSecuritySWList(newSecuritySWList);
+                            });
                     return schemeService.save(sch);
                 });
     }
 
-    @PutMapping("/{id}/remove_criteria_object/")
-    Mono<Scheme> removeSchemeCriteriaObject(@PathVariable Long id, @RequestBody Object object) {
+    @PutMapping("/{id}/remove_criteria_object/{crObjId}")
+    Mono<Scheme> removeSchemeCriteriaObject(@PathVariable Long id, @PathVariable Long crObjId) {
         return schemeService.findById(id)
                 .flatMap(sch -> {
                     List<Object> newCriteriaObjectList = sch.getCriteriaList();
-                    newCriteriaObjectList.remove(object);
-                    sch.setCriteriaList(newCriteriaObjectList);
+                    objectService.findById(crObjId)
+                            .subscribe(v -> {
+                                newCriteriaObjectList.remove(v);
+                                sch.setCriteriaList(newCriteriaObjectList);
+                            });
                     return schemeService.save(sch);
                 });
     }

@@ -7,6 +7,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.kuchibecka.asuTpSecReactive.entity.Exploit;
 import ru.kuchibecka.asuTpSecReactive.entity.SecuritySW;
+import ru.kuchibecka.asuTpSecReactive.service.ExploitService;
 import ru.kuchibecka.asuTpSecReactive.service.SecuritySWService;
 
 import java.util.List;
@@ -17,6 +18,9 @@ import java.util.List;
 public class SecuritySWController {
     @Autowired
     private SecuritySWService securitySWService;
+
+    @Autowired
+    private ExploitService exploitService;
 
     @GetMapping(path = "")
     Flux<SecuritySW> getSecuritySWs() {
@@ -55,13 +59,30 @@ public class SecuritySWController {
                 );
     }
 
-    @PutMapping("/{id}/add_exploit/")
-    Mono<SecuritySW> addSecuritySWExploit(@PathVariable Long id, @RequestBody Exploit exploit) {
+    @PutMapping("/{id}/add_exploit/{expId}")
+    Mono<SecuritySW> addSecuritySWExploit(@PathVariable Long id, @PathVariable Long expId) {
         return securitySWService.findById(id)
                 .flatMap(dbSecuritySW -> {
                     List<Exploit> newExploitList = dbSecuritySW.getSecurityExploit();
-                    newExploitList.add(exploit);
-                    dbSecuritySW.setSecurityExploit(newExploitList);
+                    exploitService.findById(expId)
+                            .subscribe(v -> {
+                                newExploitList.add(v);
+                                dbSecuritySW.setSecurityExploit(newExploitList);
+                            });
+                    return securitySWService.save(dbSecuritySW);
+                });
+    }
+
+    @PutMapping("/{id}/remove_exploit/{expId}")
+    Mono<SecuritySW> removeSecuritySWExploit(@PathVariable Long id, @PathVariable Long expId) {
+        return securitySWService.findById(id)
+                .flatMap(dbSecuritySW -> {
+                    List<Exploit> newExploitList = dbSecuritySW.getSecurityExploit();
+                    exploitService.findById(expId)
+                            .subscribe(v -> {
+                                newExploitList.remove(v);
+                                dbSecuritySW.setSecurityExploit(newExploitList);
+                            });
                     return securitySWService.save(dbSecuritySW);
                 });
     }
