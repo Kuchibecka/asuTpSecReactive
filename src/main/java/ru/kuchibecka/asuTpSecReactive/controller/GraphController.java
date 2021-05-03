@@ -74,19 +74,14 @@ public class GraphController {
         return schemeService
                 .findById(id)
                 .flatMapIterable(a -> {
-                    List<Object> objectList = a.getObjectList();
-                    List<Virus> virusList;
+                    List<Virus> virusList = a.getVirusList();
                     List<Node> nodeList = new ArrayList<>();
-                    for (Object o : objectList) {
-                        virusList = o.getVirusList();
-                        // System.out.println(virusList);
-                        for (Virus vi : virusList) {
-                            Node virus = new Node(
-                                    "virus" + vi.getVirus_id().toString(),
-                                    vi.getName()
-                            );
-                            nodeList.add(virus);
-                        }
+                    for (Virus vi : virusList) {
+                        Node virus = new Node(
+                                "virus" + vi.getVirus_id().toString(),
+                                vi.getName()
+                        );
+                        nodeList.add(virus);
                     }
                     return nodeList;
                 });
@@ -131,18 +126,14 @@ public class GraphController {
         return schemeService
                 .findById(id)
                 .flatMapIterable(a -> {
-                    List<Object> objectList = a.getObjectList();
-                    List<SecuritySW> securitySWList;
+                    List<SecuritySW> securitySWList = a.getSecuritySWList();
                     List<Node> nodeList = new ArrayList<>();
-                    for (Object o : objectList) {
-                        securitySWList = o.getSecuritySWList();
-                        for (SecuritySW sw : securitySWList) {
-                            Node virus = new Node(
-                                    "securitySW" + sw.getSecSW_id().toString(),
-                                    sw.getName()
-                            );
-                            nodeList.add(virus);
-                        }
+                    for (SecuritySW sw : securitySWList) {
+                        Node secSw = new Node(
+                                "securitySW" + sw.getSecSW_id().toString(),
+                                sw.getName()
+                        );
+                        nodeList.add(secSw);
                     }
                     return nodeList;
                 });
@@ -204,7 +195,7 @@ public class GraphController {
                                 level3,
                                 200
                         );
-                        level3+=200;
+                        level3 += 200;
                         treeNodeList.add(node);
                         int level2 = 300;
                         for (Object and : el.getAndCriteriaList()) {
@@ -215,7 +206,7 @@ public class GraphController {
                                     100
                             );
                             treeNodeList.add(andNode);
-                            level2+=300;
+                            level2 += 300;
                         }
                     }
                     return treeNodeList;
