@@ -73,7 +73,6 @@ public class SchemeController {
                 );
     }
 
-    //todo: НОВЫЙ
     @PutMapping("/{id}/add_object/{objId}")
     Mono<Scheme> addSchemeObject(@PathVariable Long id, @PathVariable Long objId) {
         return schemeService.findById(id)
@@ -87,7 +86,6 @@ public class SchemeController {
                     return schemeService.save(sch);
                 });
     }
-    //todo: НОВЫЙ
 
     @PutMapping("/{id}/add_virus/{virusId}")
     Mono<Scheme> addSchemeVirus(@PathVariable Long id, @PathVariable Long virusId) {
