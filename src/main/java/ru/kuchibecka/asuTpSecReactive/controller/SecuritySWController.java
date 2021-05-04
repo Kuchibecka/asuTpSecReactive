@@ -66,8 +66,9 @@ public class SecuritySWController {
                     List<Exploit> newExploitList = dbSecuritySW.getSecurityExploit();
                     exploitService.findById(expId)
                             .subscribe(v -> {
-                                if (newExploitList.contains(v))
+                                if (newExploitList.contains(v)) {
                                     return;
+                                }
                                 newExploitList.add(v);
                                 dbSecuritySW.setSecurityExploit(newExploitList);
                             });
@@ -82,8 +83,9 @@ public class SecuritySWController {
                     List<Exploit> newExploitList = dbSecuritySW.getSecurityExploit();
                     exploitService.findById(expId)
                             .subscribe(v -> {
-                                if (!newExploitList.contains(v))
+                                if (!newExploitList.contains(v)) {
                                     return;
+                                }
                                 newExploitList.remove(v);
                                 dbSecuritySW.setSecurityExploit(newExploitList);
                             });
