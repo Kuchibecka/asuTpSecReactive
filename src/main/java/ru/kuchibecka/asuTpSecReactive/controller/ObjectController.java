@@ -72,7 +72,7 @@ public class ObjectController {
                     List<Virus> newVirusList = dbObject.getVirusList();
                     virusService.findById(virusId)
                             .subscribe(v -> {
-                                if (newVirusList.contains(v)) {
+                                if (!v.getIsInstance()) {
                                     return;
                                 }
                                 newVirusList.add(v);
@@ -89,7 +89,7 @@ public class ObjectController {
                     List<SecuritySW> newSecuritySWList = dbObject.getSecuritySWList();
                     securitySWService.findById(secSwId)
                             .subscribe(v -> {
-                                if (newSecuritySWList.contains(v)) {
+                                if (!v.getIsInstance()) {
                                     return;
                                 }
                                 newSecuritySWList.add(v);
@@ -106,7 +106,7 @@ public class ObjectController {
                     List<Object> newObjectList = dbObject.getObjectList();
                     objectService.findById(objId)
                             .subscribe(v -> {
-                                if (newObjectList.contains(v)) {
+                                if (!v.getIsInstance()) {
                                     return;
                                 }
                                 newObjectList.add(v);
@@ -123,7 +123,7 @@ public class ObjectController {
                     List<Object> newCriteriaList = dbObject.getAndCriteriaList();
                     objectService.findById(objId)
                             .subscribe(v -> {
-                                if (newCriteriaList.contains(v)) {
+                                if (!v.getIsInstance()) {
                                     return;
                                 }
                                 newCriteriaList.add(v);

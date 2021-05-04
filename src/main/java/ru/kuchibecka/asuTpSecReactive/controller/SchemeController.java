@@ -80,7 +80,7 @@ public class SchemeController {
                     List<Object> newObjectList = sch.getObjectList();
                     objectService.findById(objId)
                             .subscribe(v -> {
-                                if (newObjectList.contains(v)) {
+                                if (!v.getIsInstance()) {
                                     return;
                                 }
                                 newObjectList.add(v);
@@ -97,7 +97,7 @@ public class SchemeController {
                     List<Virus> newVirusList = sch.getVirusList();
                     virusService.findById(virusId)
                             .subscribe(v -> {
-                                if (newVirusList.contains(v)) {
+                                if (!v.getIsInstance()) {
                                     return;
                                 }
                                 newVirusList.add(v);
@@ -114,7 +114,7 @@ public class SchemeController {
                     List<SecuritySW> newSecuritySWList = sch.getSecuritySWList();
                     securitySWService.findById(secSwId)
                             .subscribe(v -> {
-                                if (newSecuritySWList.contains(v)) {
+                                if (!v.getIsInstance()) {
                                     return;
                                 }
                                 newSecuritySWList.add(v);
@@ -131,7 +131,7 @@ public class SchemeController {
                     List<Object> newCriteriaObjectList = sch.getCriteriaList();
                     objectService.findById(crObjId)
                             .subscribe(v -> {
-                                if (newCriteriaObjectList.contains(v)) {
+                                if (!v.getIsInstance()) {
                                     return;
                                 }
                                 newCriteriaObjectList.add(v);

@@ -67,7 +67,7 @@ public class VirusController {
                     List<Exploit> newExploitList = dbVirus.getVirusExploit();
                     exploitService.findById(expId)
                             .subscribe(v -> {
-                                if (newExploitList.contains(v)) {
+                                if (!v.getIsInstance()) {
                                     return;
                                 }
                                 newExploitList.add(v);
