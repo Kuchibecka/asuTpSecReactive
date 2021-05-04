@@ -65,70 +65,46 @@ public class ObjectController {
                 );
     }
 
-    @PutMapping("/{id}/add_virus/{virusId}")
-    Mono<Object> addVirusObject(@PathVariable Long id, @PathVariable Long virusId) {
+    @PutMapping("/{id}/add_virus/")
+    Mono<Object> addVirusObject(@PathVariable Long id, @RequestBody Virus virus) {
         return objectService.findById(id)
                 .flatMap(dbObject -> {
                     List<Virus> newVirusList = dbObject.getVirusList();
-                    virusService.findById(virusId)
-                            .subscribe(v -> {
-                                if (!v.getIsInstance()) {
-                                    return;
-                                }
-                                newVirusList.add(v);
-                                dbObject.setVirusList(newVirusList);
-                            });
+                    newVirusList.add(virus);
+                    dbObject.setVirusList(newVirusList);
                     return objectService.save(dbObject);
                 });
     }
 
-    @PutMapping("/{id}/add_securitysw/{secSwId}")
-    Mono<Object> addSecuritySWObject(@PathVariable Long id, @PathVariable Long secSwId) {
+    @PutMapping("/{id}/add_securitysw/")
+    Mono<Object> addSecuritySWObject(@PathVariable Long id, @RequestBody SecuritySW securitySW) {
         return objectService.findById(id)
                 .flatMap(dbObject -> {
                     List<SecuritySW> newSecuritySWList = dbObject.getSecuritySWList();
-                    securitySWService.findById(secSwId)
-                            .subscribe(v -> {
-                                if (!v.getIsInstance()) {
-                                    return;
-                                }
-                                newSecuritySWList.add(v);
-                                dbObject.setSecuritySWList(newSecuritySWList);
-                            });
+                    newSecuritySWList.add(securitySW);
+                    dbObject.setSecuritySWList(newSecuritySWList);
                     return objectService.save(dbObject);
                 });
     }
 
-    @PutMapping("/{id}/add_object/{objId}")
-    Mono<Object> addObjectObject(@PathVariable Long id, @PathVariable Long objId) {
+    @PutMapping("/{id}/add_object/")
+    Mono<Object> addObjectObject(@PathVariable Long id, @RequestBody Object object) {
         return objectService.findById(id)
                 .flatMap(dbObject -> {
                     List<Object> newObjectList = dbObject.getObjectList();
-                    objectService.findById(objId)
-                            .subscribe(v -> {
-                                if (!v.getIsInstance()) {
-                                    return;
-                                }
-                                newObjectList.add(v);
-                                dbObject.setObjectList(newObjectList);
-                            });
+                    newObjectList.add(object);
+                    dbObject.setObjectList(newObjectList);
                     return objectService.save(dbObject);
                 });
     }
 
-    @PutMapping("/{id}/add_criteria_object/{objId}")
-    Mono<Object> addCriteriaObject(@PathVariable Long id, @PathVariable Long objId) {
+    @PutMapping("/{id}/add_criteria_object/")
+    Mono<Object> addCriteriaObject(@PathVariable Long id, @RequestBody Object object) {
         return objectService.findById(id)
                 .flatMap(dbObject -> {
-                    List<Object> newCriteriaList = dbObject.getAndCriteriaList();
-                    objectService.findById(objId)
-                            .subscribe(v -> {
-                                if (!v.getIsInstance()) {
-                                    return;
-                                }
-                                newCriteriaList.add(v);
-                                dbObject.setAndCriteriaList(newCriteriaList);
-                            });
+                    List<Object> andCriteriaList = dbObject.getAndCriteriaList();
+                    andCriteriaList.add(object);
+                    dbObject.setAndCriteriaList(andCriteriaList);
                     return objectService.save(dbObject);
                 });
     }
@@ -138,14 +114,16 @@ public class ObjectController {
         return objectService.findById(id)
                 .flatMap(dbObject -> {
                     List<Virus> newVirusList = dbObject.getVirusList();
-                    virusService.findById(virusId)
-                            .subscribe(v -> {
-                                if (!newVirusList.contains(v)) {
-                                    return;
-                                }
-                                newVirusList.remove(v);
-                                dbObject.setVirusList(newVirusList);
-                            });
+                    int l = 0;
+                    for (Virus o : newVirusList) {
+                        if (o.getVirus_id().equals(virusId)) {
+                            break;
+                        } else {
+                            l++;
+                        }
+                    }
+                    newVirusList.remove(l);
+                    dbObject.setVirusList(newVirusList);
                     return objectService.save(dbObject);
                 });
     }
@@ -155,14 +133,16 @@ public class ObjectController {
         return objectService.findById(id)
                 .flatMap(dbObject -> {
                     List<SecuritySW> newSecuritySWList = dbObject.getSecuritySWList();
-                    securitySWService.findById(secSwId)
-                            .subscribe(v -> {
-                                if (!newSecuritySWList.contains(v)) {
-                                    return;
-                                }
-                                newSecuritySWList.remove(v);
-                                dbObject.setSecuritySWList(newSecuritySWList);
-                            });
+                    int l = 0;
+                    for (SecuritySW o : newSecuritySWList) {
+                        if (o.getSecSW_id().equals(secSwId)) {
+                            break;
+                        } else {
+                            l++;
+                        }
+                    }
+                    newSecuritySWList.remove(l);
+                    dbObject.setSecuritySWList(newSecuritySWList);
                     return objectService.save(dbObject);
                 });
     }
@@ -172,14 +152,16 @@ public class ObjectController {
         return objectService.findById(id)
                 .flatMap(dbObject -> {
                     List<Object> newObjectList = dbObject.getObjectList();
-                    objectService.findById(objId)
-                            .subscribe(v -> {
-                                if (!newObjectList.contains(v)) {
-                                    return;
-                                }
-                                newObjectList.remove(v);
-                                dbObject.setObjectList(newObjectList);
-                            });
+                    int l = 0;
+                    for (Object o : newObjectList) {
+                        if (o.getObj_id().equals(objId)) {
+                            break;
+                        } else {
+                            l++;
+                        }
+                    }
+                    newObjectList.remove(l);
+                    dbObject.setObjectList(newObjectList);
                     return objectService.save(dbObject);
                 });
     }
@@ -188,15 +170,17 @@ public class ObjectController {
     Mono<Object> removeCriteriaObject(@PathVariable Long id, @PathVariable Long objId) {
         return objectService.findById(id)
                 .flatMap(dbObject -> {
-                    List<Object> newCriteriaList = dbObject.getAndCriteriaList();
-                    objectService.findById(objId)
-                            .subscribe(v -> {
-                                if (!newCriteriaList.contains(v)) {
-                                    return;
-                                }
-                                newCriteriaList.remove(v);
-                                dbObject.setAndCriteriaList(newCriteriaList);
-                            });
+                    List<Object> newCriteriaObjectList = dbObject.getAndCriteriaList();
+                    int l = 0;
+                    for (Object o : newCriteriaObjectList) {
+                        if (o.getObj_id().equals(objId)) {
+                            break;
+                        } else {
+                            l++;
+                        }
+                    }
+                    newCriteriaObjectList.remove(l);
+                    dbObject.setAndCriteriaList(newCriteriaObjectList);
                     return objectService.save(dbObject);
                 });
     }

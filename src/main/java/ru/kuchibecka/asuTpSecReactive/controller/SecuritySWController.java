@@ -59,19 +59,13 @@ public class SecuritySWController {
                 );
     }
 
-    @PutMapping("/{id}/add_exploit/{expId}")
-    Mono<SecuritySW> addSecuritySWExploit(@PathVariable Long id, @PathVariable Long expId) {
+    @PutMapping("/{id}/add_exploit/")
+    Mono<SecuritySW> addSecuritySWExploit(@PathVariable Long id, @RequestBody Exploit exploit) {
         return securitySWService.findById(id)
                 .flatMap(dbSecuritySW -> {
                     List<Exploit> newExploitList = dbSecuritySW.getSecurityExploit();
-                    exploitService.findById(expId)
-                            .subscribe(v -> {
-                                if (!v.getIsInstance()) {
-                                    return;
-                                }
-                                newExploitList.add(v);
-                                dbSecuritySW.setSecurityExploit(newExploitList);
-                            });
+                    newExploitList.add(exploit);
+                    dbSecuritySW.setSecurityExploit(newExploitList);
                     return securitySWService.save(dbSecuritySW);
                 });
     }
@@ -81,14 +75,16 @@ public class SecuritySWController {
         return securitySWService.findById(id)
                 .flatMap(dbSecuritySW -> {
                     List<Exploit> newExploitList = dbSecuritySW.getSecurityExploit();
-                    exploitService.findById(expId)
-                            .subscribe(v -> {
-                                if (!newExploitList.contains(v)) {
-                                    return;
-                                }
-                                newExploitList.remove(v);
-                                dbSecuritySW.setSecurityExploit(newExploitList);
-                            });
+                    int l = 0;
+                    for (Exploit o : newExploitList) {
+                        if (o.getSE_id().equals(expId)) {
+                            break;
+                        } else {
+                            l++;
+                        }
+                    }
+                    newExploitList.remove(l);
+                    dbSecuritySW.setSecurityExploit(newExploitList);
                     return securitySWService.save(dbSecuritySW);
                 });
     }

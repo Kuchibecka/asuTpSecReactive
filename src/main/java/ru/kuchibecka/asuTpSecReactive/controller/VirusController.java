@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.kuchibecka.asuTpSecReactive.entity.Exploit;
+import ru.kuchibecka.asuTpSecReactive.entity.Object;
 import ru.kuchibecka.asuTpSecReactive.entity.SecuritySW;
 import ru.kuchibecka.asuTpSecReactive.entity.Virus;
 import ru.kuchibecka.asuTpSecReactive.service.ExploitService;
@@ -60,19 +61,13 @@ public class VirusController {
                 );
     }
 
-    @PutMapping("/{id}/add_exploit/{expId}")
-    Mono<Virus> addVirusExploit(@PathVariable Long id, @PathVariable Long expId) {
+    @PutMapping("/{id}/add_exploit/")
+    Mono<Virus> addVirusExploit(@PathVariable Long id, @RequestBody Exploit exploit) {
         return virusService.findById(id)
                 .flatMap(dbVirus -> {
                     List<Exploit> newExploitList = dbVirus.getVirusExploit();
-                    exploitService.findById(expId)
-                            .subscribe(v -> {
-                                if (!v.getIsInstance()) {
-                                    return;
-                                }
-                                newExploitList.add(v);
-                                dbVirus.setVirusExploit(newExploitList);
-                            });
+                    newExploitList.add(exploit);
+                    dbVirus.setVirusExploit(newExploitList);
                     return virusService.save(dbVirus);
                 });
     }
@@ -82,14 +77,16 @@ public class VirusController {
         return virusService.findById(id)
                 .flatMap(dbVirus -> {
                     List<Exploit> newExploitList = dbVirus.getVirusExploit();
-                    exploitService.findById(expId)
-                            .subscribe(v -> {
-                                if (!newExploitList.contains(v)) {
-                                    return;
-                                }
-                                newExploitList.remove(v);
-                                dbVirus.setVirusExploit(newExploitList);
-                            });
+                    int l = 0;
+                    for (Exploit o : newExploitList) {
+                        if (o.getSE_id().equals(expId)) {
+                            break;
+                        } else {
+                            l++;
+                        }
+                    }
+                    newExploitList.remove(l);
+                    dbVirus.setVirusExploit(newExploitList);
                     return virusService.save(dbVirus);
                 });
     }
