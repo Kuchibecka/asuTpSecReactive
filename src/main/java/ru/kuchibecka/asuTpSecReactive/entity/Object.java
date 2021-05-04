@@ -29,6 +29,8 @@ public class Object {
 
     private String description;
 
+    private Boolean isInstance;
+
     @Relationship(type = "INFECTED_BY", direction = Relationship.Direction.OUTGOING)
     private List<Virus> virusList = new ArrayList<>();
 

@@ -28,6 +28,8 @@ public class SecuritySW {
 
     private String description;
 
+    private Boolean isInstance;
+
     @Relationship(type = "PREVENTS_EXPLOIT", direction = Relationship.Direction.OUTGOING)
     private List<Exploit> securityExploit = new ArrayList<>();
 }

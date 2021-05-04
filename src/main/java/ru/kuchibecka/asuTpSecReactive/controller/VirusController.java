@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.kuchibecka.asuTpSecReactive.entity.Exploit;
+import ru.kuchibecka.asuTpSecReactive.entity.SecuritySW;
 import ru.kuchibecka.asuTpSecReactive.entity.Virus;
 import ru.kuchibecka.asuTpSecReactive.service.ExploitService;
 import ru.kuchibecka.asuTpSecReactive.service.VirusService;
@@ -89,5 +90,17 @@ public class VirusController {
                             });
                     return virusService.save(dbVirus);
                 });
+    }
+
+    @PostMapping("/new_instance/{id}")
+    Mono<Virus> createVirusInstance(@PathVariable Long id) {
+        return virusService.findById(id)
+                .flatMap(obj -> {
+                    Virus instance = new Virus();
+                    BeanUtils.copyProperties(obj, instance, "virus_id");
+                    instance.setIsInstance(true);
+                    return virusService.save(instance);
+                });
+
     }
 }

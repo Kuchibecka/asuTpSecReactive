@@ -90,4 +90,16 @@ public class SecuritySWController {
                     return securitySWService.save(dbSecuritySW);
                 });
     }
+
+    @PostMapping("/new_instance/{id}")
+    Mono<SecuritySW> createSecuritySwInstance(@PathVariable Long id) {
+        return securitySWService.findById(id)
+                .flatMap(obj -> {
+                    SecuritySW instance = new SecuritySW();
+                    BeanUtils.copyProperties(obj, instance, "secSW_id");
+                    instance.setIsInstance(true);
+                    return securitySWService.save(instance);
+                });
+
+    }
 }

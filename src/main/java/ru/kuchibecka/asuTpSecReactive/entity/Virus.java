@@ -26,6 +26,8 @@ public class Virus {
 
     private String description;
 
+    private Boolean isInstance;
+
     @Relationship(type = "USES_EXPLOIT", direction = Relationship.Direction.OUTGOING)
     private List<Exploit> virusExploit = new ArrayList<>();
 }

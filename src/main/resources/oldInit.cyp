@@ -267,4 +267,3 @@ MATCH (o1:Object)
   WHERE (o.name = "WaterPump1" AND o1.name = "WaterPump2")
 CREATE (o1)-[:AND]->(o)
 RETURN o1, o;
-

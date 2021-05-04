@@ -192,4 +192,16 @@ public class ObjectController {
                     return objectService.save(dbObject);
                 });
     }
+
+    @PostMapping("/new_instance/{id}")
+    Mono<Object> createObjectInstance(@PathVariable Long id) {
+        return objectService.findById(id)
+                .flatMap(obj -> {
+                    Object instance = new Object();
+                    BeanUtils.copyProperties(obj, instance, "obj_id");
+                    instance.setIsInstance(true);
+                    return objectService.save(instance);
+                });
+
+    }
 }
