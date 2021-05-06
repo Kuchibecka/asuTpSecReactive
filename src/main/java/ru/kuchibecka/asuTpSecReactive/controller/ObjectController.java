@@ -9,8 +9,6 @@ import ru.kuchibecka.asuTpSecReactive.entity.Object;
 import ru.kuchibecka.asuTpSecReactive.entity.SecuritySW;
 import ru.kuchibecka.asuTpSecReactive.entity.Virus;
 import ru.kuchibecka.asuTpSecReactive.service.ObjectService;
-import ru.kuchibecka.asuTpSecReactive.service.SecuritySWService;
-import ru.kuchibecka.asuTpSecReactive.service.VirusService;
 
 import java.util.List;
 
@@ -21,12 +19,6 @@ import java.util.List;
 public class ObjectController {
     @Autowired
     private ObjectService objectService;
-
-    @Autowired
-    private VirusService virusService;
-
-    @Autowired
-    private SecuritySWService securitySWService;
 
     @GetMapping(path = "")
     Flux<Object> getObjects() {
