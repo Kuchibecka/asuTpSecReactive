@@ -42,5 +42,4 @@ public class Node {
         this.data = new data(data);
         this.position = new position(x, y);
     }
-    //todo: Другие поля класса Object? Скорее всего не нужны
 }
