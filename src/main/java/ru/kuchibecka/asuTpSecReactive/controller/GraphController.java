@@ -230,7 +230,7 @@ public class GraphController {
                         for (Object andObj : andConnection) {
                             String relId = "e" + o.getObj_id() + "-" + andObj.getObj_id();
                             Relationship relationship1 = new Relationship(
-                                    relId + "_andSide1",
+                                    relId + "-andSide1",
                                     o.getObj_id().toString() + "_" + andObj.getObj_id().toString(), andObj.getObj_id().toString(),
                                     TYPE,
                                     ANIMATED,
@@ -239,7 +239,7 @@ public class GraphController {
                             );
                             treeRelationshipList.add(relationship1);
                             Relationship relationship2 = new Relationship(
-                                    relId + "_andSide2",
+                                    relId + "-andSide2",
                                     o.getObj_id().toString() + "_" + andObj.getObj_id().toString(), o.getObj_id().toString(),
                                     TYPE,
                                     ANIMATED,
@@ -248,7 +248,7 @@ public class GraphController {
                             );
                             treeRelationshipList.add(relationship2);
                             Relationship andToRoot = new Relationship(
-                                    relId + "_andToRoot",
+                                    relId + "-andToRoot",
                                     id + "treeRoot", o.getObj_id().toString() + "_" + andObj.getObj_id().toString(),
                                     TYPE,
                                     ANIMATED,
@@ -263,7 +263,7 @@ public class GraphController {
                     for (Object o : criteriaList) {
                         if (!markedAnd.contains(o.getObj_id())) {
                             Relationship orToRoot = new Relationship(
-                                    id + "_orToRoot",
+                                    id + "-orToRoot-" + o.getObj_id().toString(),
                                     id + "treeRoot", o.getObj_id().toString(),
                                     TYPE,
                                     ANIMATED,

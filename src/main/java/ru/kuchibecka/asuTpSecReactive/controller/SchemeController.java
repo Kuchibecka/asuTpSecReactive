@@ -5,12 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import ru.kuchibecka.asuTpSecReactive.entity.*;
 import ru.kuchibecka.asuTpSecReactive.entity.Object;
-import ru.kuchibecka.asuTpSecReactive.entity.Scheme;
-import ru.kuchibecka.asuTpSecReactive.entity.SecuritySW;
-import ru.kuchibecka.asuTpSecReactive.entity.Virus;
+import ru.kuchibecka.asuTpSecReactive.entity.modeling.Graph;
+import ru.kuchibecka.asuTpSecReactive.entity.modeling.Vertex;
 import ru.kuchibecka.asuTpSecReactive.service.SchemeService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -179,5 +180,69 @@ public class SchemeController {
                     sch.setCriteriaList(newCriteriaObjectList);
                     return schemeService.save(sch);
                 });
+    }
+
+    @GetMapping("/{id}/model")
+    Mono<Scheme> modeling(@PathVariable Long id) {
+        return schemeService.findById(id)
+                .flatMap(scheme -> {
+                    Boolean result;
+                    List<Object> objectList = scheme.getObjectList();
+                    List<Object> criteriaList = scheme.getCriteriaList();
+                    List<Object> totalAndList = new ArrayList<>();
+                    List<Object> totalOrList = criteriaList;
+                    /*
+                    System.out.println("Все объекты: ");
+                    for (Object o : objectList) {
+                        System.out.println(o.getName());
+                    }
+                    System.out.println("Объекты и связи: ");
+                    for (Object o : objectList) {
+                        for (Object o1 : o.getObjectList()) {
+                            System.out.println(o.getName() + " connected to " + o1.getName());
+                        }
+                    }
+                    System.out.println("Дерево откаазов: ");
+                    System.out.println("Все связи И: ");
+                    for (Object o : objectList) {
+                        List<Object> andList = o.getAndCriteriaList();
+                        totalAndList.addAll(andList);
+                        if (!andList.isEmpty()) {
+                            totalAndList.add(o);
+                        }
+                        for (Object and : andList) {
+                            System.out.println(o.getName() + " AND " + and.getName());
+                        }
+                    }
+                    totalOrList.removeAll(totalAndList);
+                    System.out.println("Все или: ");
+                    for (Object o : totalOrList) {
+                        System.out.println(o.getName());
+                    }*/
+                    Graph graph = new Graph();
+                    for (Object o : objectList) {
+                        List<SecuritySW> securitySWList = o.getSecuritySWList();
+                        List<Long> securitySWs = new ArrayList<>();
+                        for (SecuritySW s : securitySWList) {
+                            for (Exploit e : s.getSecurityExploit()) {
+                                securitySWs.add(e.getSE_id());
+                            }
+                        }
+                        List<Virus> virusList = o.getVirusList();
+                        List<Long> viruses = new ArrayList<>();
+                        for (Virus v : virusList) {
+                            for (Exploit e : v.getVirusExploit()) {
+                                viruses.add(e.getSE_id());
+                            }
+                        }
+                        graph.addVertex(new Vertex(o.getObj_id(), securitySWs, viruses));
+                        for (Object connected : o.getObjectList()) {
+                            graph.addEdge(o.getObj_id().intValue(), connected.getObj_id().intValue());
+                        }
+                    }
+                    graph.bfc();
+                    return schemeService.findById(id);
+                });
+        // return schemeService.findById(id);
     }
 }
