@@ -2,25 +2,25 @@ package ru.kuchibecka.asuTpSecReactive.entity.modeling;
 
 import lombok.Data;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Queue;
+import java.util.*;
 
 @Data
 public class Graph {
-    private ArrayList<Vertex> vertexList = new ArrayList<>(); //массив вершин
-    private int[][] adjMat = new int[50][50]; // матрица смежности todo: что-то сделать с инициализацией
+    private ArrayList<Vertex> vertexList; //массив вершин
+    private int[][] adjMat; // матрица смежности todo: что-то сделать с инициализацией
     private int nVertexes; // текущее количество вершин
     private Queue<Integer> queue = new ArrayDeque<>();
+    private ArrayList<ArrayList<Integer>> treeAndRelations;
+    private ArrayList<Integer> treeOrRelations;
 
-    public void addVertex(Vertex vertex) {
-        vertexList.add(vertex);
-        nVertexes++;
-    }
-
-    public void addEdge(int source, int target) {
-        adjMat[source][target] = 1;
-        adjMat[target][source] = 1;
+    public Graph(ArrayList<Vertex> vertexList, int[][] adjMat,
+                 ArrayList<ArrayList<Integer>> treeAndRelations,
+                 ArrayList<Integer> treeOrRelations) {
+        this.adjMat = adjMat;
+        this.vertexList = vertexList;
+        this.nVertexes = vertexList.size();
+        this.treeAndRelations = treeAndRelations;
+        this.treeOrRelations = treeOrRelations;
     }
 
     private int getUnvisitedVertex(int v) {
@@ -32,9 +32,19 @@ public class Graph {
         return -1;
     }
 
+    //todo:
+    // используется обход вширь потому что:
+    // 1) Это оответствует модели распространения самореплицируещегося вируса;
+    // 2) Это позволяет ускорить алгоритм засчёт
+    // todo: проверки на падение дерева
+    //  (каждый раз, когда заражается объект, идёт проверка на критичность для дерева
+    //  если в соотв с деревом отказа система уже отказала, рез-тат сразу выводится,
+    //  а моделирование останавливается)
+    //
     public void bfc() {
         ArrayList<Vertex> initiallyInfected = new ArrayList<>();
         for (Vertex v : vertexList) {
+            System.out.println(v.isInfected());
             if (v.isInfected()) {
                 initiallyInfected.add(v);
             }
@@ -42,40 +52,39 @@ public class Graph {
         for (Vertex v : initiallyInfected) {
             // обход
             v.setVisited(true);
-            System.out.println("Visited: " + v);
-            queue.add(Math.toIntExact(v.getId()));
+            System.out.println("Starting from: " + v.getId());
+            queue.add(v.getId());
+            System.out.println("Added to queue: " + v.getId());
 
             while (!queue.isEmpty()) {
-                int v1 = Math.toIntExact(queue.remove());
-                for (int i = 0; i < vertexList.size(); i++) {
-                    if (vertexList.get(i).getId() == v1) {
-                        v1 = i;
-                    }
-                }
-                Vertex spreading = vertexList.get(v1);
-                int nextVertex = getUnvisitedVertex(v1);
-                if (nextVertex != -1) {
-                    for (int i = 0; i < vertexList.size(); i++) {
-                        if (vertexList.get(i).getId() == nextVertex) {
-                            nextVertex = i;
-                        }
-                    }
-                }
-                while (nextVertex != -1) {
+                int v1 = queue.remove();
+                System.out.println("Removed from queue: " + v1);
+                int nextVertex;
+                while ((nextVertex = getUnvisitedVertex(v1)) != -1) {
                     Vertex currentVertex = vertexList.get(nextVertex);
                     currentVertex.setVisited(true);
-                    System.out.println("Also visited: " + currentVertex);
-                    if (!currentVertex.getSecurityExploits().containsAll(spreading.getVirusExploits())) {
+                    System.out.println("Посетил: " + currentVertex.getId());
+                    if (!currentVertex.getSecurityExploits().containsAll(v.getVirusExploits())) {
                         currentVertex.setInfected(true);
-                        nextVertex = getUnvisitedVertex(v1);
                     } else {
-                        nextVertex = -1;
+                        break;
                     }
+                    /* else {
+                        nextVertex = -1;
+                    }*/
                     queue.add(nextVertex);
+
+                    System.out.println("Следующий на очереди: " + nextVertex);
                 }
             }
 
-            //todo: сброс флагов обхода для этого вируса
+            // сброс флагов обхода у вершин для этого вируса
+            for (Vertex vertex : vertexList) {
+                vertex.setVisited(false);
+            }
+        }
+        for (Vertex v: vertexList) {
+            System.out.println(v.getId() + " isInfected: " + v.isInfected());
         }
     }
 }

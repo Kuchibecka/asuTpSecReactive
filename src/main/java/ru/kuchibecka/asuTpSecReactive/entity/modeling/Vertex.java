@@ -7,13 +7,24 @@ import java.util.List;
 @Getter
 @Setter
 public class Vertex {
-    private final Long id;
+    private final int id;
     private List<Long> securityExploits;
     private List<Long> virusExploits;
     private boolean isInfected;
     private boolean visited;
 
-    public Vertex(Long id, List<Long> securitySWs, List<Long> viruses) {
+    @Override
+    public String toString() {
+        return "Vertex{" +
+                "id=" + id +
+                ", securityExploits=" + securityExploits +
+                ", virusExploits=" + virusExploits +
+                ", isInfected=" + isInfected +
+                ", visited=" + visited +
+                '}';
+    }
+
+    public Vertex(int id, List<Long> securitySWs, List<Long> viruses) {
         this.id = id;
         this.securityExploits = securitySWs; // заранее собрать снаружи
         this.virusExploits = viruses;        // заранее собрать снаружи

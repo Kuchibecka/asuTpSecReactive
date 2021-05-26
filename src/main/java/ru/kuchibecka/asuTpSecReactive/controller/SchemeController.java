@@ -12,7 +12,9 @@ import ru.kuchibecka.asuTpSecReactive.entity.modeling.Vertex;
 import ru.kuchibecka.asuTpSecReactive.service.SchemeService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -189,37 +191,16 @@ public class SchemeController {
                     Boolean result;
                     List<Object> objectList = scheme.getObjectList();
                     List<Object> criteriaList = scheme.getCriteriaList();
-                    List<Object> totalAndList = new ArrayList<>();
-                    List<Object> totalOrList = criteriaList;
-                    /*
-                    System.out.println("Все объекты: ");
+                    ArrayList<Vertex> vertexList = new ArrayList<>();
+                    int size = objectList.size();
+                    int[][] adjMatrix = new int[size][size];
+                    Map<Integer, Integer> index = new HashMap<>();
+                    int i = 0;
                     for (Object o : objectList) {
-                        System.out.println(o.getName());
+                        index.put(o.getObj_id().intValue(), i);
+                        i++;
                     }
-                    System.out.println("Объекты и связи: ");
-                    for (Object o : objectList) {
-                        for (Object o1 : o.getObjectList()) {
-                            System.out.println(o.getName() + " connected to " + o1.getName());
-                        }
-                    }
-                    System.out.println("Дерево откаазов: ");
-                    System.out.println("Все связи И: ");
-                    for (Object o : objectList) {
-                        List<Object> andList = o.getAndCriteriaList();
-                        totalAndList.addAll(andList);
-                        if (!andList.isEmpty()) {
-                            totalAndList.add(o);
-                        }
-                        for (Object and : andList) {
-                            System.out.println(o.getName() + " AND " + and.getName());
-                        }
-                    }
-                    totalOrList.removeAll(totalAndList);
-                    System.out.println("Все или: ");
-                    for (Object o : totalOrList) {
-                        System.out.println(o.getName());
-                    }*/
-                    Graph graph = new Graph();
+                    System.out.println("Соответствие: " + index);
                     for (Object o : objectList) {
                         List<SecuritySW> securitySWList = o.getSecuritySWList();
                         List<Long> securitySWs = new ArrayList<>();
@@ -234,12 +215,42 @@ public class SchemeController {
                             for (Exploit e : v.getVirusExploit()) {
                                 viruses.add(e.getSE_id());
                             }
+                            System.out.println("For virus " + v.getVirus_id() + " viruses: " + viruses.toString());
                         }
-                        graph.addVertex(new Vertex(o.getObj_id(), securitySWs, viruses));
+                        vertexList.add(new Vertex(index.get(o.getObj_id().intValue()), securitySWs, viruses));
                         for (Object connected : o.getObjectList()) {
-                            graph.addEdge(o.getObj_id().intValue(), connected.getObj_id().intValue());
+                            int source = index.get(o.getObj_id().intValue());
+                            int target = index.get(connected.getObj_id().intValue());
+                            adjMatrix[source][target] = 1;
+                            adjMatrix[target][source] = 1;
                         }
                     }
+                    //todo: убрать, это для отладки
+                    System.out.println("vertexList: ");
+                    for (Vertex vertex : vertexList) {
+                        System.out.println(vertex.toString());
+                    }
+                    ArrayList<ArrayList<Integer>> treeAndRelations = new ArrayList<>();
+                    ArrayList<Integer> treeOrRelations = new ArrayList<>();
+                    for (Object o : criteriaList) {
+                        treeOrRelations.add(o.getObj_id().intValue());
+                        if (!o.getAndCriteriaList().isEmpty()) {
+                            ArrayList<Integer> andRelation = new ArrayList<>();
+                            andRelation.add(o.getObj_id().intValue());
+                            for (Object and : o.getAndCriteriaList()) {
+                                andRelation.add(and.getObj_id().intValue());
+                            }
+                            treeAndRelations.add(andRelation);
+                        }
+                    }
+                    for (ArrayList<Integer> andRel : treeAndRelations) {
+                        for (Integer j : andRel) {
+                            treeOrRelations.remove(j);
+                        }
+                    }
+                    System.out.println("Summary and relations: " + treeAndRelations);
+                    System.out.println("Summary or relations: " + treeOrRelations);
+                    Graph graph = new Graph(vertexList, adjMatrix, treeAndRelations, treeOrRelations);
                     graph.bfc();
                     return schemeService.findById(id);
                 });
