@@ -251,7 +251,7 @@ public class SchemeController {
                     System.out.println("Summary and relations: " + treeAndRelations);
                     System.out.println("Summary or relations: " + treeOrRelations);
                     Graph graph = new Graph(vertexList, adjMatrix, treeAndRelations, treeOrRelations);
-                    graph.bfc();
+                    System.out.println("Итог моделирования, система отказоустойчива: " + graph.bfc());
                     return schemeService.findById(id);
                 });
         // return schemeService.findById(id);

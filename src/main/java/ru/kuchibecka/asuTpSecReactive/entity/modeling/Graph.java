@@ -6,12 +6,13 @@ import java.util.*;
 
 @Data
 public class Graph {
-    private ArrayList<Vertex> vertexList; //массив вершин
-    private int[][] adjMat; // матрица смежности todo: что-то сделать с инициализацией
+    private ArrayList<Vertex> vertexList; // массив вершин
+    private int[][] adjMat; // матрица смежности todo: инициализация исправлена, выделяется
+    //                                                  столько памяти сколько нужно
     private int nVertexes; // текущее количество вершин
     private Queue<Integer> queue = new ArrayDeque<>();
-    private ArrayList<ArrayList<Map<Integer, Boolean>>> treeAndRelations;
-    private ArrayList<Integer> treeOrRelations;
+    private ArrayList<ArrayList<Map<Integer, Boolean>>> treeAndRelations; // для хранения and-соотношений
+    private ArrayList<Integer> treeOrRelations; // для хранения or-соотношений
 
     public Graph(ArrayList<Vertex> vertexList, int[][] adjMat,
                  ArrayList<ArrayList<Integer>> treeAndRelations,
@@ -46,13 +47,12 @@ public class Graph {
     // используется обход вширь потому что:
     // 1) Это оответствует модели распространения самореплицируещегося вируса;
     // 2) Это позволяет ускорить алгоритм засчёт
-    // todo: проверки на падение дерева
+    //  проверки на падение дерева
     //  (каждый раз, когда заражается объект, идёт проверка на критичность для дерева
     //  если в соотв с деревом отказа система уже отказала, рез-тат сразу выводится,
     //  а моделирование останавливается)
     //
-    public void bfc() {
-        Boolean result = true;
+    public Boolean bfc() {
         ArrayList<Vertex> initiallyInfected = new ArrayList<>();
         for (Vertex v : vertexList) {
             System.out.println(v.isInfected());
@@ -63,61 +63,55 @@ public class Graph {
         for (Vertex v : initiallyInfected) {
             // обход
             v.setVisited(true);
-            System.out.println("Starting from: " + v.getId());
+            System.out.println("Начало зааржения от: " + v.getId());
             queue.add(v.getId());
-            System.out.println("Added to queue: " + v.getId());
 
             while (!queue.isEmpty()) {
                 int v1 = queue.remove();
-                System.out.println("Removed from queue: " + v1);
                 int nextVertex;
                 while ((nextVertex = getUnvisitedVertex(v1)) != -1) {
                     Vertex currentVertex = vertexList.get(nextVertex);
                     currentVertex.setVisited(true);
-                    System.out.println("Посетил: " + currentVertex.getId());
+                    System.out.println("Вирус распространился на: " + currentVertex.getId());
                     if (!currentVertex.getSecurityExploits().containsAll(v.getVirusExploits())) {
                         currentVertex.setInfected(true);
+                        // проверка дерева отказа на случай
+                        //          незамедлительного завершения при падении системы (or-условие отказа)
                         if (this.treeOrRelations.contains(currentVertex.getId())) {
-                            result = false;
                             System.out.println("Завершение работы! Or-условие для id: " + currentVertex.getId() + "!");
-                            break;
-                            // return result;
+                            return false;
                         } else {
-                            // проверка дерева отказа на случай
-                            //          быстрого завершения при падении системы
+                            // проверка на наличие заражённого объекта в and-условиях отказа
                             for (ArrayList<Map<Integer, Boolean>> andRel : this.treeAndRelations) {
                                 for (Map<Integer, Boolean> j : andRel) {
                                     if (j.containsKey(currentVertex.getId())) {
                                         if (!j.get(currentVertex.getId())) {
                                             System.out.println("Заразил из И-соотношения: " + currentVertex.getId() + "!");
+                                            // отметка о выполнении одной из ветвей and-условия отказа
                                             j.put(currentVertex.getId(), true);
                                         }
                                     }
+                                    // проверка дерева отказа на случай
+                                    //          незамедлительного завершения при падении системы (and-условие)
                                     if (!j.containsValue(false)) {
-                                        result = false;
                                         System.out.println("Завершение работы! And-условие для: " + andRel + "!");
-                                        // с break не рабоатет, но как поставлю return, всё будет ок
-                                        break;
-                                        // return result;
+                                        return false;
                                     }
                                 }
                             }
                         }
-                        // todo: чек дерева отказа
                         queue.add(nextVertex);
                     }
-                    System.out.println("Следующий на очереди: " + nextVertex);
                 }
             }
-
             // сброс флагов обхода у вершин для этого вируса
             for (Vertex vertex : vertexList) {
                 vertex.setVisited(false);
             }
         }
-        for (Vertex v : vertexList) {
+        /*for (Vertex v : vertexList) {
             System.out.println(v.getId() + " isInfected: " + v.isInfected());
-        }
-        // return result;
+        }*/
+        return true;
     }
 }
