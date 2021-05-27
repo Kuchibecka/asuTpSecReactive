@@ -10,7 +10,7 @@ public class Graph {
     private int[][] adjMat; // матрица смежности todo: что-то сделать с инициализацией
     private int nVertexes; // текущее количество вершин
     private Queue<Integer> queue = new ArrayDeque<>();
-    private ArrayList<ArrayList<Integer>> treeAndRelations;
+    private ArrayList<ArrayList<Map<Integer, Boolean>>> treeAndRelations;
     private ArrayList<Integer> treeOrRelations;
 
     public Graph(ArrayList<Vertex> vertexList, int[][] adjMat,
@@ -19,7 +19,16 @@ public class Graph {
         this.adjMat = adjMat;
         this.vertexList = vertexList;
         this.nVertexes = vertexList.size();
-        this.treeAndRelations = treeAndRelations;
+        this.treeAndRelations = new ArrayList<>();
+        for (ArrayList<Integer> and : treeAndRelations) {
+            Map<Integer, Boolean> infectionMap = new HashMap<>();
+            for (Integer j : and) {
+                infectionMap.put(j, false);
+            }
+            ArrayList<Map<Integer, Boolean>> mapAndList = new ArrayList<>();
+            mapAndList.add(infectionMap);
+            this.treeAndRelations.add(mapAndList);
+        }
         this.treeOrRelations = treeOrRelations;
     }
 
@@ -42,6 +51,7 @@ public class Graph {
     //  а моделирование останавливается)
     //
     public void bfc() {
+        Boolean result = true;
         ArrayList<Vertex> initiallyInfected = new ArrayList<>();
         for (Vertex v : vertexList) {
             System.out.println(v.isInfected());
@@ -66,14 +76,31 @@ public class Graph {
                     System.out.println("Посетил: " + currentVertex.getId());
                     if (!currentVertex.getSecurityExploits().containsAll(v.getVirusExploits())) {
                         currentVertex.setInfected(true);
-                    } else {
-                        break;
+                        if (this.treeOrRelations.contains(currentVertex.getId())) {
+                            result = false;
+                            System.out.println("Завершение работы! Or-условие для id: " + currentVertex.getId() + "!");
+                            break;
+                            // return result;
+                        } else {
+                            // проверка дерева отказа на случай
+                            //          быстрого завершения при падении системы
+                            for (ArrayList<Map<Integer, Boolean>> andRel : this.treeAndRelations) {
+                                for (Map<Integer, Boolean> j : andRel) {
+                                    if (j.get(currentVertex.getId())) {
+                                        j.put(currentVertex.getId(), true);
+                                    }
+                                    if (!j.containsValue(false)) {
+                                        result = false;
+                                        System.out.println("Завершение работы! And-условие для: " + andRel + "!");
+                                        break;
+                                        // return result;
+                                    }
+                                }
+                            }
+                        }
+                        // todo: чек дерева отказа
+                        queue.add(nextVertex);
                     }
-                    /* else {
-                        nextVertex = -1;
-                    }*/
-                    queue.add(nextVertex);
-
                     System.out.println("Следующий на очереди: " + nextVertex);
                 }
             }
@@ -83,8 +110,9 @@ public class Graph {
                 vertex.setVisited(false);
             }
         }
-        for (Vertex v: vertexList) {
+        for (Vertex v : vertexList) {
             System.out.println(v.getId() + " isInfected: " + v.isInfected());
         }
+        // return result;
     }
 }

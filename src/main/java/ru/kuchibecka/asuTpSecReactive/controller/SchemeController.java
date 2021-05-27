@@ -233,12 +233,12 @@ public class SchemeController {
                     ArrayList<ArrayList<Integer>> treeAndRelations = new ArrayList<>();
                     ArrayList<Integer> treeOrRelations = new ArrayList<>();
                     for (Object o : criteriaList) {
-                        treeOrRelations.add(o.getObj_id().intValue());
+                        treeOrRelations.add(index.get(o.getObj_id().intValue()));
                         if (!o.getAndCriteriaList().isEmpty()) {
                             ArrayList<Integer> andRelation = new ArrayList<>();
-                            andRelation.add(o.getObj_id().intValue());
+                            andRelation.add(index.get(o.getObj_id().intValue()));
                             for (Object and : o.getAndCriteriaList()) {
-                                andRelation.add(and.getObj_id().intValue());
+                                andRelation.add(index.get(and.getObj_id().intValue()));
                             }
                             treeAndRelations.add(andRelation);
                         }
