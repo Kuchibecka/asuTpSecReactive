@@ -64,8 +64,5 @@ public class Node {
         this.position = new position();
         this.data = new data(data);
         this.position = new position(x, y);
-        if (this.id.matches("\\d*")) {
-            this.type = "output";
-        }
     }
 }

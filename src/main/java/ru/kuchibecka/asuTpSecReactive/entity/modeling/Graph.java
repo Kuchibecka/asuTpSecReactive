@@ -29,6 +29,7 @@ public class Graph {
             mapAndList.add(infectionMap);
             this.treeAndRelations.add(mapAndList);
         }
+        System.out.println("Tree and relations: " + this.treeAndRelations);
         this.treeOrRelations = treeOrRelations;
     }
 
@@ -86,12 +87,16 @@ public class Graph {
                             //          быстрого завершения при падении системы
                             for (ArrayList<Map<Integer, Boolean>> andRel : this.treeAndRelations) {
                                 for (Map<Integer, Boolean> j : andRel) {
-                                    if (j.get(currentVertex.getId())) {
-                                        j.put(currentVertex.getId(), true);
+                                    if (j.containsKey(currentVertex.getId())) {
+                                        if (!j.get(currentVertex.getId())) {
+                                            System.out.println("Заразил из И-соотношения: " + currentVertex.getId() + "!");
+                                            j.put(currentVertex.getId(), true);
+                                        }
                                     }
                                     if (!j.containsValue(false)) {
                                         result = false;
                                         System.out.println("Завершение работы! And-условие для: " + andRel + "!");
+                                        // с break не рабоатет, но как поставлю return, всё будет ок
                                         break;
                                         // return result;
                                     }
