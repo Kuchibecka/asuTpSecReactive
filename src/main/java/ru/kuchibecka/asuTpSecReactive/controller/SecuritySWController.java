@@ -89,7 +89,7 @@ public class SecuritySWController {
                 });
     }
 
-    @PostMapping("/new_instance/{id}")
+    /*@PostMapping("/new_instance/{id}")
     Mono<SecuritySW> createSecuritySwInstance(@PathVariable Long id) {
         return securitySWService.findById(id)
                 .flatMap(obj -> {
@@ -99,5 +99,5 @@ public class SecuritySWController {
                     return securitySWService.save(instance);
                 });
 
-    }
+    }*/
 }

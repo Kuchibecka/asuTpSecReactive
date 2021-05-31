@@ -184,8 +184,8 @@ public class SchemeController {
                 });
     }
 
-    @GetMapping("/{id}/model")
-    Mono<Scheme> modeling(@PathVariable Long id) {
+    @GetMapping("/{id}/modeling")
+    Mono<Boolean> modeling(@PathVariable Long id) {
         return schemeService.findById(id)
                 .flatMap(scheme -> {
                     Boolean result;
@@ -251,9 +251,9 @@ public class SchemeController {
                     System.out.println("Summary and relations: " + treeAndRelations);
                     System.out.println("Summary or relations: " + treeOrRelations);
                     Graph graph = new Graph(vertexList, adjMatrix, treeAndRelations, treeOrRelations);
-                    System.out.println("Итог моделирования, система отказоустойчива: " + graph.bfc());
-                    return schemeService.findById(id);
+                    result = graph.bfc();
+                    System.out.println("Итог моделирования, система отказоустойчива: " + result);
+                    return Mono.just(result);
                 });
-        // return schemeService.findById(id);
     }
 }

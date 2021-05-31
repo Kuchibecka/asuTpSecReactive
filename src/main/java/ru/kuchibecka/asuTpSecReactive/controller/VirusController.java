@@ -91,7 +91,7 @@ public class VirusController {
                 });
     }
 
-    @PostMapping("/new_instance/{id}")
+    /*@PostMapping("/new_instance/{id}")
     Mono<Virus> createVirusInstance(@PathVariable Long id) {
         return virusService.findById(id)
                 .flatMap(obj -> {
@@ -101,5 +101,5 @@ public class VirusController {
                     return virusService.save(instance);
                 });
 
-    }
+    }*/
 }
